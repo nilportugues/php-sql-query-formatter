@@ -1,7 +1,7 @@
-[![Build Status](https://travis-ci.org/nilportugues/sql-query-formatter.png)](https://travis-ci.org/nilportugues/sql-query-formatter) SQL Query Formatter
+SQL Query Formatter
 =================
 
-[![Latest Stable Version](https://poser.pugx.org/nilportugues/sql-query-formatter/v/stable.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![Total Downloads](https://poser.pugx.org/nilportugues/sql-query-formatter/downloads.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![Latest Unstable Version](https://poser.pugx.org/nilportugues/sql-query-formatter/v/unstable.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![License](https://poser.pugx.org/nilportugues/sql-query-formatter/license.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) 
+[![Build Status](https://travis-ci.org/nilportugues/sql-query-formatter.png)](https://travis-ci.org/nilportugues/sql-query-formatter) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20/mini.png)](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20) [![Latest Stable Version](https://poser.pugx.org/nilportugues/sql-query-formatter/v/stable.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![Total Downloads](https://poser.pugx.org/nilportugues/sql-query-formatter/downloads.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![License](https://poser.pugx.org/nilportugues/sql-query-formatter/license.svg)](https://packagist.org/packages/nilportugues/sql-query-formatter) 
 
 
 A very lightweight PHP class that re-formats unreadable and computer-generated SQL query statements to human-friendly, readable text.
