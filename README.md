@@ -15,7 +15,7 @@ A very lightweight PHP class that re-formats unreadable and computer-generated S
 * [7. License](#block7)
 
 <a name="block1"></a>
-# 1.Installation
+## 1.Installation
 Add the following to your `composer.json` file :
 
 ```js
@@ -25,9 +25,10 @@ Add the following to your `composer.json` file :
     }
 }
 ```
----
+
+
 <a name="block2"></a>
-# 2. Features
+## 2. Features
 
 **Human readable SQL formatting**
 
@@ -38,8 +39,9 @@ Add the following to your `composer.json` file :
 - SQL Query Formatter takes data binding seriously.
 - Placeholder syntax such as `:variable` or `?` is taken into account and is preserved when formatting.
 
+
 <a name="block3"></a>
-# 3. Usage
+## 3. Usage
 
 Sample code:
 ```php
@@ -93,7 +95,7 @@ WHERE
 ```
 
 <a name="block4"></a>
-# 4. Fully tested
+## 4. Fully tested
 Testing has been done using PHPUnit and [Travis-CI](https://travis-ci.org). All code has been tested to be compatible from PHP 5.3 up to PHP 5.6 and [HHVM](http://hhvm.com/).
 
 To run the test suite, you need [Composer](http://getcomposer.org):
@@ -102,26 +104,25 @@ To run the test suite, you need [Composer](http://getcomposer.org):
     $ php composer.phar install --dev
     $ vendor/bin/phpunit
 ```
----
+
 
 <a name="block5"></a>
-# 5. Author
+## 5. Author
 Nil Portugués Calderó
 
  - <contact@nilportugues.com>
  - [http://nilportugues.com](http://nilportugues.com)
 
----
+
 <a name="block6"></a>
-# 6. Special Thanks
+## 6. Special Thanks
 I would like to thank the following people:
 
 - Jeremy Dorn <jeremy@jeremydorn.com> for his [sql-formatter](https://github.com/jdorn/sql-formatter) implementation I used as a basis for building this version.
 
----
 
 <a name="block7"></a>
-# 7. License
+## 7. License
 SQL Query Builder is licensed under the MIT license.
 
 ```
