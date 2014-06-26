@@ -47,9 +47,11 @@ Sample code:
 use NilPortugues\SqlQueryFormatter\Formatter;
 
 $query = <<<SQL
-SELECT user.user_id, user.username, (SELECT role.role_name FROM role 
-WHERE (role.role_id = :v1) LIMIT :v2, :v3 ) AS user_role, (SELECT role.role_name FROM
-role WHERE (role.role_id = :v4) LIMIT :v5, :v6 ) AS role FROM user WHERE (user.user_id = :v7)
+SELECT user.user_id, user.username, (SELECT 
+role.role_name FROM role WHERE (role.role_id = :v1) 
+LIMIT :v2, :v3 ) AS user_role, (SELECT 
+role.role_name FROM role WHERE (role.role_id = :v4)
+LIMIT :v5, :v6 ) AS role FROM user WHERE (user.user_id = :v7)
 SQL;
 
 $formatter = new Formatter();
