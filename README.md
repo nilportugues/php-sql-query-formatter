@@ -96,7 +96,7 @@ WHERE
 
 <a name="block4"></a>
 ## 4. Fully tested
-Testing has been done using PHPUnit and [Travis-CI](https://travis-ci.org). All code has been tested to be compatible from PHP 5.3 up to PHP 5.6 and [HHVM](http://hhvm.com/).
+Testing has been done using PHPUnit and [Travis-CI](https://travis-ci.org). All code has been tested to be compatible from PHP 5.4 up to PHP 5.6 and [HHVM (nightly release)](http://hhvm.com/).
 
 To run the test suite, you need [Composer](http://getcomposer.org):
 
@@ -123,7 +123,7 @@ I would like to thank the following people:
 
 <a name="block7"></a>
 ## 7. License
-SQL Query Builder is licensed under the MIT license.
+SQL Query Formatter is licensed under the MIT license.
 
 ```
 Copyright (c) 2014 Nil Portugués Calderó
