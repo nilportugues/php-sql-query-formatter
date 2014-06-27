@@ -101,8 +101,8 @@ Testing has been done using PHPUnit and [Travis-CI](https://travis-ci.org). All 
 To run the test suite, you need [Composer](http://getcomposer.org):
 
 ```bash
-    $ php composer.phar install --dev
-    $ vendor/bin/phpunit
+    php composer.phar install --dev
+    bin/phpunit
 ```
 
 
@@ -118,7 +118,7 @@ Nil Portugués Calderó
 ## 6. Special Thanks
 I would like to thank the following people:
 
-- Jeremy Dorn <jeremy@jeremydorn.com> for his [sql-formatter](https://github.com/jdorn/sql-formatter) implementation I used as a basis for building this version.
+- [Jeremy Dorn](mailto:jeremy@jeremydorn.com) for his [sql-formatter](https://github.com/jdorn/sql-formatter) implementation I used as a basis for building this version.
 
 
 <a name="block7"></a>
