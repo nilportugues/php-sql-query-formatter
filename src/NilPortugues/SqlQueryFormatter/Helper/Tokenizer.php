@@ -777,8 +777,8 @@ class Tokenizer
     }
 
     /**
-     * @param $string
-     * @param $currentStringLength
+     * @param string $string
+     * @param integer $currentStringLength
      *
      * @return string
      */
@@ -794,7 +794,7 @@ class Tokenizer
     }
 
     /**
-     * @param $cacheKey
+     * @param string $cacheKey
      *
      * @return mixed
      */
@@ -806,9 +806,9 @@ class Tokenizer
     /**
      * Get the next token and the token type and store it in cache.
      *
-     * @param $string
+     * @param string $string
      * @param $token
-     * @param $cacheKey
+     * @param string $cacheKey
      *
      * @return array
      */
@@ -883,7 +883,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return bool
@@ -904,7 +904,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
@@ -920,7 +920,7 @@ class Tokenizer
     }
 
     /**
-     * @param  $string
+     * @param  string $string
      *
      * @return array
      */
@@ -946,7 +946,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
@@ -960,7 +960,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return array
      */
@@ -1042,7 +1042,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return bool
@@ -1067,7 +1067,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return bool
@@ -1103,7 +1103,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return bool
@@ -1118,7 +1118,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return array
@@ -1132,7 +1132,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @param $matches
      *
      * @return bool
@@ -1147,7 +1147,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return array
@@ -1163,7 +1163,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $upper
+     * @param       string $upper
      * @param array $matches
      *
      * @return bool
@@ -1178,7 +1178,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return array
@@ -1195,7 +1195,7 @@ class Tokenizer
      * A function must be succeeded by '('.
      * This makes it so that a function such as "COUNT(" is considered a function, but "COUNT" alone is not function.
      *
-     * @param   $string
+     * @param   string $string
      *
      * @param array $matches
      *
@@ -1207,7 +1207,7 @@ class Tokenizer
     }
 
     /**
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return array
@@ -1221,7 +1221,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return array
      */

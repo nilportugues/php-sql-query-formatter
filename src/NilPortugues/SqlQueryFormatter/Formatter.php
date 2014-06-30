@@ -253,7 +253,7 @@ class Formatter
     /**
      * Adds a new line break if needed.
      *
-     * @param $tab
+     * @param string $tab
      *
      * @return bool
      */
@@ -283,7 +283,7 @@ class Formatter
 
     /**
      * @param $token
-     * @param $tab
+     * @param string $tab
      * @param $queryValue
      *
      * @return string
@@ -314,7 +314,7 @@ class Formatter
     }
 
     /**
-     * @param $tab
+     * @param string $tab
      * @param $queryValue
      */
     private function writeInlineParenthesesBlock($tab, $queryValue)
@@ -391,7 +391,7 @@ class Formatter
     }
 
     /**
-     * @param $length
+     * @param integer $length
      */
     private function writeNewLineForLongInlineValues($length)
     {
@@ -443,8 +443,8 @@ class Formatter
     }
 
     /**
-     * @param $addedNewline
-     * @param $tab
+     * @param boolean $addedNewline
+     * @param string $tab
      */
     private function addNewLineBeforeClosingParentheses($addedNewline, $tab)
     {
@@ -477,8 +477,8 @@ class Formatter
     }
 
     /**
-     * @param $addedNewline
-     * @param $tab
+     * @param boolean $addedNewline
+     * @param string $tab
      */
     private function writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab)
     {
@@ -551,8 +551,8 @@ class Formatter
     }
 
     /**
-     * @param $addedNewline
-     * @param $tab
+     * @param boolean $addedNewline
+     * @param string $tab
      */
     private function writeNewLineBeforeReservedWord($addedNewline, $tab)
     {
