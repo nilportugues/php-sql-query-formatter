@@ -985,7 +985,7 @@ class Tokenizer
      *  3. double quoted string using "" or \" to escape
      *  4. single quoted string using '' or \' to escape
      *
-     * @param $string
+     * @param string $string
      *
      * @return null
      */
