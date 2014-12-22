@@ -43,6 +43,7 @@ class Indent
      */
     protected $indentTypes = [];
 
+
     /**
      * Increase the Special Indent if increaseSpecialIndent is true after the current iteration.
      */

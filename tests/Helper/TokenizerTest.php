@@ -42,7 +42,7 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      */
-    public function it_should_tokenize_white_space()
+    public function itShouldTokenizeWhiteSpace()
     {
         $sql = <<<SQL
 SELECT * FROM users;
@@ -65,7 +65,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_comment_starting_with_symbol_number()
+    public function itShouldTokenizeCommentStartingWithSymbolNumber()
     {
         $sql = <<<SQL
 SELECT * FROM users # A comment
@@ -89,7 +89,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_comment_starting_with_dash()
+    public function itShouldTokenizeCommentStartingWithDash()
     {
         $sql = <<<SQL
 SELECT * FROM
@@ -114,7 +114,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_comment_with_block_comment()
+    public function itShouldTokenizeCommentWithBlockComment()
     {
         $sql = <<<SQL
 SELECT * FROM /* This is a block comment */ WHERE 1 = 2;
@@ -138,7 +138,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_comment_with_unterminated_block_comment()
+    public function itShouldTokenizeCommentWithUnterminatedBlockComment()
     {
         $sql = <<<SQL
 SELECT * FROM /* This is a block comment WHERE 1 = 2;
@@ -158,7 +158,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_quoted()
+    public function itShouldTokenizeQuoted()
     {
         $sql = <<<SQL
 UPDATE `PREFIX_cms_category` SET `position` = 0
@@ -181,7 +181,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_user_defined_variable_with_quotations()
+    public function itShouldTokenizeUserDefinedVariableWithQuotations()
     {
         $sql = <<<SQL
 SELECT au_lname, au_fname, phone FROM authors WHERE au_lname LIKE @find;
@@ -204,7 +204,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_user_defined_variable_with_at_symbol()
+    public function itShouldTokenizeUserDefinedVariableWithAtSymbol()
     {
         $sql = <<<SQL
 SELECT @"weird variable name";
@@ -223,7 +223,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_user_defined_variable_no_progress_tokenizer()
+    public function itShouldTokenizeUserDefinedVariableNoProgressTokenizer()
     {
         $sql = <<<SQL
             SELECT @ and b; /* Edge case */
@@ -244,7 +244,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_numeral_integer()
+    public function itShouldTokenizeNumeralInteger()
     {
         $sql = <<<SQL
 SELECT user_id FROM user WHERE user_id = 1;
@@ -265,7 +265,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_numeral_negative_integer_as_positive_integer()
+    public function itShouldTokenizeNumeralNegativeIntegerAsPositiveInteger()
     {
         $sql = <<<SQL
 SELECT user_id FROM user WHERE user_id = -1;
@@ -285,7 +285,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_numeral_float()
+    public function itShouldTokenizeNumeralFloat()
     {
         $sql = <<<SQL
 SELECT user_id FROM user WHERE user_id = 3.14;
@@ -305,7 +305,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_numeral_negative_float_as_positive_float()
+    public function itShouldTokenizeNumeralNegativeFloatAsPositiveFloat()
     {
         $sql = <<<SQL
 SELECT user_id FROM user WHERE user_id = -3.14;
@@ -327,7 +327,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_boundary_character()
+    public function itShouldTokenizeBoundaryCharacter()
     {
         $sql = "SELECT id_user, name FROM users";
 
@@ -350,7 +350,7 @@ SQL;
      *
      * @test
      */
-    public function it_should_tokenize_reserved_word_preceded_by_dot_character()
+    public function itShouldTokenizeReservedWordPrecededByDotCharacter()
     {
         $sql = <<<SQL
 SELECT users.desc as userId FROM users;
@@ -371,7 +371,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_reserved_top_level()
+    public function itShouldTokenizeReservedTopLevel()
     {
         $sql = "SELECT id_user, name FROM users";
         $result = $this->tokenizer->tokenize($sql);
@@ -390,7 +390,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_reserved_new_line()
+    public function itShouldTokenizeReservedNewLine()
     {
         $sql = <<<SQL
 UPDATE users SET registration_date = "0000-00-00" WHERE id_user = 1 OR id_user = 2;
@@ -410,7 +410,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_reserved()
+    public function itShouldTokenizeReserved()
     {
         $sql = <<<SQL
 SELECT customer_id, customer_name, COUNT(order_id) as total
@@ -434,7 +434,7 @@ SQL;
     /**
      * @test
      */
-    public function it_should_tokenize_function()
+    public function itShouldTokenizeFunction()
     {
         $sql = <<<SQL
 SELECT customer_id, customer_name, COUNT(order_id) as total FROM customers GROUP BY customer_id, customer_name

@@ -19,7 +19,7 @@ final class Token
     /**
      * @var array
      */
-    public static $reserved = array(
+    public static $reserved = [
         'ACCESSIBLE',
         'ACTION',
         'AGAINST',
@@ -289,12 +289,12 @@ final class Token
         'WORK',
         'WRITE',
         'YEAR_MONTH'
-    );
+    ];
 
     /**
      * @var array
      */
-    public static $reservedTopLevel = array(
+    public static $reservedTopLevel = [
         'SELECT',
         'FROM',
         'WHERE',
@@ -314,12 +314,12 @@ final class Token
         'UNION',
         'EXCEPT',
         'INTERSECT'
-    );
+    ];
 
     /**
      * @var array
      */
-    public static $reservedNewLine = array(
+    public static $reservedNewLine = [
         'LEFT OUTER JOIN',
         'RIGHT OUTER JOIN',
         'LEFT JOIN',
@@ -330,12 +330,12 @@ final class Token
         'XOR',
         'OR',
         'AND'
-    );
+    ];
 
     /**
      * @var array
      */
-    public static  $functions = array(
+    public static $functions = [
         'ABS',
         'ACOS',
         'ADDDATE',
@@ -633,12 +633,12 @@ final class Token
         'Y',
         'YEAR',
         'YEARWEEK'
-    );
+    ];
 
     /**
      * @var array
      */
-    public static $boundaries = array(
+    public static $boundaries = [
         ',',
         ';',
         ')',
@@ -657,5 +657,5 @@ final class Token
         '|',
         '&',
         '#'
-    );
+    ];
 }

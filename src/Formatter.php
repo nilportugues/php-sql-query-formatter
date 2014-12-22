@@ -11,6 +11,7 @@ namespace NilPortugues\SqlQueryFormatter;
 
 use NilPortugues\SqlQueryFormatter\Helper\Indent;
 use NilPortugues\SqlQueryFormatter\Helper\Tokenizer;
+use NilPortugues\SqlQueryFormatter\Helper\WhiteSpace;
 
 /**
  * Lightweight Formatter heavily based on https://github.com/jdorn/sql-formatter.
@@ -21,48 +22,37 @@ use NilPortugues\SqlQueryFormatter\Helper\Tokenizer;
 class Formatter
 {
     /**
+     * @var Tokenizer
+     */
+    protected $tokenizer;
+    /**
      * @var string
      */
     private $tab = "    ";
-
     /**
      * @var int
      */
     private $inlineCount = 0;
-
     /**
      * @var bool
      */
     private $newline = false;
-
     /**
      * @var bool
      */
     private $inlineParentheses = false;
-
     /**
      * @var bool
      */
     private $clauseLimit = false;
-
     /**
      * @var string
      */
     private $formattedSql = '';
-
     /**
-     * @var Helper\Indent
+     * @var Indent
      */
     private $indentation;
-
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->tokenizer = new Tokenizer();
-        $this->indentation = new Indent();
-    }
 
     /**
      * Returns a SQL string in a readable human-friendly format.
@@ -73,11 +63,11 @@ class Formatter
      */
     public function format($sql)
     {
-        $this->formattedSql = '';
-        $tab                = "\t";
+        $this->reset();
+        $tab = "\t";
 
         $originalTokens = $this->tokenizer->tokenize($sql);
-        $tokens         = $this->removeTokenWhitespace($originalTokens);
+        $tokens         = WhiteSpace::removeTokenWhitespace($originalTokens);
 
         foreach ($tokens as $i => $token) {
             $queryValue = $token[Tokenizer::TOKEN_VALUE];
@@ -120,7 +110,7 @@ class Formatter
                 }
                 $this->writeNewLineForLongInlineValues($length);
 
-                if ($this->isPrecedingCurrentTokenOfTokenTypeWhiteSpace($originalTokens, $token)) {
+                if (WhiteSpace::isPrecedingCurrentTokenOfTokenTypeWhiteSpace($originalTokens, $token)) {
                     $this->formattedSql = rtrim($this->formattedSql, ' ');
                 }
 
@@ -133,7 +123,7 @@ class Formatter
                 $this->indentation->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial($this);
                 $this->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
 
-                if ($this->tokenHasExtraWhiteSpaces($token)) {
+                if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
                     $queryValue = preg_replace('/\s+/', ' ', $queryValue);
                 }
                 $this->tokenHasLimitClause($token);
@@ -144,7 +134,7 @@ class Formatter
             } elseif ($this->isTokenTypeReservedNewLine($token)) {
                 $this->writeNewLineBeforeReservedWord($addedNewline, $tab);
 
-                if ($this->tokenHasExtraWhiteSpaces($token)) {
+                if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
                     $queryValue = preg_replace('/\s+/', ' ', $queryValue);
                 }
             }
@@ -153,47 +143,36 @@ class Formatter
                 $this->formattedSql = rtrim($this->formattedSql, ' ');
             }
 
-            if ($this->tokenHasExtraWhiteSpaceLeft($token)) {
+            if (WhiteSpace::tokenHasExtraWhiteSpaceLeft($token)) {
                 $this->formattedSql = rtrim($this->formattedSql, ' ');
             }
 
             $this->formattedSql .= $queryValue . ' ';
 
-            if ($this->tokenHasExtraWhiteSpaceRight($token)) {
+            if (WhiteSpace::tokenHasExtraWhiteSpaceRight($token)) {
                 $this->formattedSql = rtrim($this->formattedSql, ' ');
             }
 
             if ($this->tokenIsMinusSign($token, $tokens, $i)) {
                 $previousTokenType = $tokens[$i - 1][Tokenizer::TOKEN_TYPE];
 
-                if ($this->tokenIsNumberAndHasExtraWhiteSpaceRight($previousTokenType)) {
+                if (WhiteSpace::tokenIsNumberAndHasExtraWhiteSpaceRight($previousTokenType)) {
                     $this->formattedSql = rtrim($this->formattedSql, ' ');
                 }
             }
         }
 
-        return trim(str_replace(
-                array("\t", " \n"),
-                array($this->tab, "\n"), $this->formattedSql)
-        ) . "\n";
+        return trim(str_replace(["\t", " \n"], [$this->tab, "\n"], $this->formattedSql)) . "\n";
     }
 
     /**
-     * @param $originalTokens
      *
-     * @return array
      */
-    private function removeTokenWhitespace(array &$originalTokens)
+    public function reset()
     {
-        $tokens = array();
-        foreach ($originalTokens as $i => &$token) {
-            if ($token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE) {
-                $token['i'] = $i;
-                $tokens[]   = $token;
-            }
-        }
-
-        return $tokens;
+        $this->tokenizer    = new Tokenizer();
+        $this->indentation  = new Indent();
+        $this->formattedSql = '';
     }
 
     /**
@@ -228,9 +207,9 @@ class Formatter
     }
 
     /**
-     * @param $token
+     * @param        $token
      * @param string $tab
-     * @param $queryValue
+     * @param        $queryValue
      *
      * @return string
      */
@@ -261,7 +240,7 @@ class Formatter
 
     /**
      * @param string $tab
-     * @param $queryValue
+     * @param        $queryValue
      */
     private function writeInlineParenthesesBlock($tab, $queryValue)
     {
@@ -272,7 +251,7 @@ class Formatter
             array_shift($indentTypes);
             $this->indentation->setIndentTypes($indentTypes);
 
-            $this->indentation->setIndentLvl($this->indentation->getIndentLvl()-1);
+            $this->indentation->setIndentLvl($this->indentation->getIndentLvl() - 1);
 
             $this->formattedSql .= "\n" . str_repeat($tab, $this->indentation->getIndentLvl());
         }
@@ -348,21 +327,10 @@ class Formatter
         if ($this->inlineParentheses && $length > 30) {
             $this->indentation->setIncreaseBlockIndent(true);
             $this->indentation->setInlineIndented(true);
-            $this->newline             = true;
+            $this->newline = true;
         }
     }
 
-    /**
-     * @param $originalTokens
-     * @param $token
-     *
-     * @return bool
-     */
-    private function isPrecedingCurrentTokenOfTokenTypeWhiteSpace($originalTokens, $token)
-    {
-        return isset($originalTokens[$token['i'] - 1])
-        && $originalTokens[$token['i'] - 1][Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
-    }
 
     /**
      * Adds a new line break for an opening parentheses for a non-inline expression.
@@ -371,13 +339,13 @@ class Formatter
     {
         if (!$this->inlineParentheses) {
             $this->indentation->setIncreaseBlockIndent(true);
-            $this->newline             = true;
+            $this->newline = true;
         }
     }
 
     /**
      * @param boolean $addedNewline
-     * @param string $tab
+     * @param string  $tab
      */
     private function addNewLineBeforeClosingParentheses($addedNewline, $tab)
     {
@@ -398,7 +366,7 @@ class Formatter
 
     /**
      * @param boolean $addedNewline
-     * @param string $tab
+     * @param string  $tab
      */
     private function writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab)
     {
@@ -408,18 +376,6 @@ class Formatter
 
         // Add a newline after the top level reserved word
         $this->newline = true;
-    }
-
-    /**
-     * @param $token
-     *
-     * @return bool
-     */
-    private function tokenHasExtraWhiteSpaces($token)
-    {
-        return strpos($token[Tokenizer::TOKEN_VALUE], ' ') !== false
-        || strpos($token[Tokenizer::TOKEN_VALUE], "\n") !== false
-        || strpos($token[Tokenizer::TOKEN_VALUE], "\t") !== false;
     }
 
     /**
@@ -472,7 +428,7 @@ class Formatter
 
     /**
      * @param boolean $addedNewline
-     * @param string $tab
+     * @param string  $tab
      */
     private function writeNewLineBeforeReservedWord($addedNewline, $tab)
     {
@@ -501,31 +457,6 @@ class Formatter
 
     /**
      * @param $token
-     *
-     * @return bool
-     */
-    private function tokenHasExtraWhiteSpaceLeft($token)
-    {
-        return
-            $token[Tokenizer::TOKEN_VALUE] === '.'
-            || $token[Tokenizer::TOKEN_VALUE] === ','
-            || $token[Tokenizer::TOKEN_VALUE] === ';';
-    }
-
-    /**
-     * @param $token
-     *
-     * @return bool
-     */
-    private function tokenHasExtraWhiteSpaceRight($token)
-    {
-        return
-            $token[Tokenizer::TOKEN_VALUE] === '('
-            || $token[Tokenizer::TOKEN_VALUE] === '.';
-    }
-
-    /**
-     * @param $token
      * @param $tokens
      * @param $i
      *
@@ -540,17 +471,11 @@ class Formatter
     }
 
     /**
-     * @param $tokenType
-     *
-     * @return bool
+     * @return string
      */
-    private function tokenIsNumberAndHasExtraWhiteSpaceRight($tokenType)
+    public function getFormattedSql()
     {
-        return
-            $tokenType !== Tokenizer::TOKEN_TYPE_QUOTE
-            && $tokenType !== Tokenizer::TOKEN_TYPE_BACK_TICK_QUOTE
-            && $tokenType !== Tokenizer::TOKEN_TYPE_WORD
-            && $tokenType !== Tokenizer::TOKEN_TYPE_NUMBER;
+        return $this->formattedSql;
     }
 
     /**
@@ -562,13 +487,5 @@ class Formatter
     {
         $this->formattedSql = $formattedSql;
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFormattedSql()
-    {
-        return $this->formattedSql;
     }
 }

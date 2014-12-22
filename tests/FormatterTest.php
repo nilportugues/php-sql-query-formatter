@@ -64,7 +64,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
      * @param $notIndented
      * @param $indented
      */
-    public function it_should_reformat_no_indent_queries_to_indented_versions($notIndented, $indented)
+    public function itShouldReformatNoIndentQueriesToIndentedVersions($notIndented, $indented)
     {
         $formatter = new Formatter();
         $result = $formatter->format($notIndented);
