@@ -40,7 +40,6 @@ class Formatter
      */
     private $inlineParentheses = false;
 
-
     /**
      * @var bool
      */
@@ -196,8 +195,6 @@ class Formatter
 
         return $tokens;
     }
-
-
 
     /**
      * Adds a new line break if needed.
@@ -377,7 +374,6 @@ class Formatter
             $this->newline             = true;
         }
     }
-
 
     /**
      * @param boolean $addedNewline

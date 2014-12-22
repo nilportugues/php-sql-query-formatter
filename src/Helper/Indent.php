@@ -67,7 +67,6 @@ class Indent
         }
     }
 
-
     /**
      * Closing parentheses decrease the block indent level.
      */
@@ -85,7 +84,6 @@ class Indent
         }
     }
 
-
     /**
      */
     public function decreaseSpecialIndentIfCurrentIndentTypeIsSpecial()
@@ -99,7 +97,7 @@ class Indent
     }
 
     /**
-     * @return int
+     * @return boolean
      */
     public function getIncreaseBlockIndent()
     {
@@ -107,7 +105,7 @@ class Indent
     }
 
     /**
-     * @return int
+     * @return boolean
      */
     public function getIncreaseSpecialIndent()
     {

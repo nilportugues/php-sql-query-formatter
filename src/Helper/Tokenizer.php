@@ -32,7 +32,6 @@ class Tokenizer
     const TOKEN_TYPE                    = 0;
     const TOKEN_VALUE                   = 1;
 
-
     /**
      * @var string
      */
