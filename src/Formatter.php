@@ -9,6 +9,7 @@
  */
 namespace NilPortugues\SqlQueryFormatter;
 
+use NilPortugues\SqlQueryFormatter\Helper\Indent;
 use NilPortugues\SqlQueryFormatter\Helper\Tokenizer;
 
 /**
@@ -27,11 +28,6 @@ class Formatter
     /**
      * @var int
      */
-    private $indentLvl = 0;
-
-    /**
-     * @var int
-     */
     private $inlineCount = 0;
 
     /**
@@ -42,27 +38,8 @@ class Formatter
     /**
      * @var bool
      */
-    private $increaseSpecialIndent = false;
-
-    /**
-     * @var bool
-     */
-    private $increaseBlockIndent = false;
-
-    /**
-     * @var bool
-     */
     private $inlineParentheses = false;
 
-    /**
-     * @var array
-     */
-    private $indentTypes = array();
-
-    /**
-     * @var bool
-     */
-    private $inlineIndented = false;
 
     /**
      * @var bool
@@ -75,11 +52,17 @@ class Formatter
     private $formattedSql = '';
 
     /**
+     * @var Helper\Indent
+     */
+    private $indentation;
+
+    /**
      *
      */
     public function __construct()
     {
         $this->tokenizer = new Tokenizer();
+        $this->indentation = new Indent();
     }
 
     /**
@@ -100,8 +83,8 @@ class Formatter
         foreach ($tokens as $i => $token) {
             $queryValue = $token[Tokenizer::TOKEN_VALUE];
 
-            $this->increaseSpecialIndent();
-            $this->increaseBlockIndent();
+            $this->indentation->increaseSpecialIndent($this);
+            $this->indentation->increaseBlockIndent($this);
 
             $addedNewline = $this->addNewLineBreak($tab);
 
@@ -144,11 +127,11 @@ class Formatter
 
                 $this->addNewLineAfterOpeningParentheses();
             } elseif ($this->stringIsClosingParentheses($token)) {
-                $this->decreaseIndentLevelUntilIndentTypeIsSpecial();
+                $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
                 $this->addNewLineBeforeClosingParentheses($addedNewline, $tab);
             } elseif ($this->isTokenTypeReservedTopLevel($token)) {
-                $this->increaseSpecialIndent = true;
-                $this->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
+                $this->indentation->setIncreaseSpecialIndent(true);
+                $this->indentation->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial($this);
                 $this->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
 
                 if ($this->tokenHasExtraWhiteSpaces($token)) {
@@ -214,29 +197,7 @@ class Formatter
         return $tokens;
     }
 
-    /**
-     * Increase the Special Indent if increaseSpecialIndent is true after the current iteration.
-     */
-    private function increaseSpecialIndent()
-    {
-        if ($this->increaseSpecialIndent) {
-            $this->indentLvl++;
-            $this->increaseSpecialIndent = false;
-            array_unshift($this->indentTypes, 'special');
-        }
-    }
 
-    /**
-     * Increase the Block Indent if increaseBlockIndent is true after the current iteration.
-     */
-    private function increaseBlockIndent()
-    {
-        if ($this->increaseBlockIndent) {
-            $this->indentLvl++;
-            $this->increaseBlockIndent = false;
-            array_unshift($this->indentTypes, 'block');
-        }
-    }
 
     /**
      * Adds a new line break if needed.
@@ -249,7 +210,7 @@ class Formatter
     {
         $addedNewline = false;
         if ($this->newline) {
-            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentLvl);
+            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentation->getIndentLvl());
             $this->newline = false;
             $addedNewline  = true;
         }
@@ -279,7 +240,7 @@ class Formatter
     private function writeCommentBlock($token, $tab, $queryValue)
     {
         if ($token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT) {
-            $indent = str_repeat($tab, $this->indentLvl);
+            $indent = str_repeat($tab, $this->indentation->getIndentLvl());
 
             $this->formattedSql .= "\n" . $indent;
             $queryValue = str_replace("\n", "\n" . $indent, $queryValue);
@@ -309,10 +270,14 @@ class Formatter
     {
         $this->formattedSql = rtrim($this->formattedSql, ' ');
 
-        if ($this->inlineIndented) {
-            array_shift($this->indentTypes);
-            $this->indentLvl--;
-            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentLvl);
+        if ($this->indentation->getInlineIndented()) {
+            $indentTypes = $this->indentation->getIndentTypes();
+            array_shift($indentTypes);
+            $this->indentation->setIndentTypes($indentTypes);
+
+            $this->indentation->setIndentLvl($this->indentation->getIndentLvl()-1);
+
+            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentation->getIndentLvl());
         }
 
         $this->inlineParentheses = false;
@@ -349,7 +314,7 @@ class Formatter
     {
         $this->inlineParentheses = true;
         $this->inlineCount       = 0;
-        $this->inlineIndented    = false;
+        $this->indentation->setInlineIndented(false);
     }
 
     /**
@@ -384,8 +349,8 @@ class Formatter
     private function writeNewLineForLongInlineValues($length)
     {
         if ($this->inlineParentheses && $length > 30) {
-            $this->increaseBlockIndent = true;
-            $this->inlineIndented      = true;
+            $this->indentation->setIncreaseBlockIndent(true);
+            $this->indentation->setInlineIndented(true);
             $this->newline             = true;
         }
     }
@@ -408,27 +373,11 @@ class Formatter
     private function addNewLineAfterOpeningParentheses()
     {
         if (!$this->inlineParentheses) {
-            $this->increaseBlockIndent = true;
+            $this->indentation->setIncreaseBlockIndent(true);
             $this->newline             = true;
         }
     }
 
-    /**
-     * Closing parentheses decrease the block indent level.
-     */
-    private function decreaseIndentLevelUntilIndentTypeIsSpecial()
-    {
-        $this->formattedSql = rtrim($this->formattedSql, ' ');
-        $this->indentLvl--;
-
-        while ($j = array_shift($this->indentTypes)) {
-            if ($j === 'special') {
-                $this->indentLvl--;
-            } else {
-                break;
-            }
-        }
-    }
 
     /**
      * @param boolean $addedNewline
@@ -437,7 +386,7 @@ class Formatter
     private function addNewLineBeforeClosingParentheses($addedNewline, $tab)
     {
         if (!$addedNewline) {
-            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentLvl);
+            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentation->getIndentLvl());
         }
     }
 
@@ -452,19 +401,6 @@ class Formatter
     }
 
     /**
-     *
-     */
-    private function decreaseSpecialIndentIfCurrentIndentTypeIsSpecial()
-    {
-        reset($this->indentTypes);
-
-        if (current($this->indentTypes) === 'special') {
-            $this->indentLvl--;
-            array_shift($this->indentTypes);
-        }
-    }
-
-    /**
      * @param boolean $addedNewline
      * @param string $tab
      */
@@ -472,7 +408,7 @@ class Formatter
     {
         // Add a newline before the top level reserved word if necessary and indent.
         $this->formattedSql = (!$addedNewline) ? $this->formattedSql . "\n" : rtrim($this->formattedSql, $tab);
-        $this->formattedSql .= str_repeat($tab, $this->indentLvl);
+        $this->formattedSql .= str_repeat($tab, $this->indentation->getIndentLvl());
 
         // Add a newline after the top level reserved word
         $this->newline = true;
@@ -545,7 +481,7 @@ class Formatter
     private function writeNewLineBeforeReservedWord($addedNewline, $tab)
     {
         if (!$addedNewline) {
-            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentLvl);
+            $this->formattedSql .= "\n" . str_repeat($tab, $this->indentation->getIndentLvl());
         }
     }
 
@@ -619,5 +555,24 @@ class Formatter
             && $tokenType !== Tokenizer::TOKEN_TYPE_BACK_TICK_QUOTE
             && $tokenType !== Tokenizer::TOKEN_TYPE_WORD
             && $tokenType !== Tokenizer::TOKEN_TYPE_NUMBER;
+    }
+
+    /**
+     * @param string $formattedSql
+     *
+     * @return $this
+     */
+    public function setFormattedSql($formattedSql)
+    {
+        $this->formattedSql = $formattedSql;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFormattedSql()
+    {
+        return $this->formattedSql;
     }
 }
