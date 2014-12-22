@@ -98,7 +98,6 @@ class Formatter
         $tokens         = $this->removeTokenWhitespace($originalTokens);
 
         foreach ($tokens as $i => $token) {
-
             $queryValue = $token[Tokenizer::TOKEN_VALUE];
 
             $this->increaseSpecialIndent();
@@ -112,7 +111,6 @@ class Formatter
             }
 
             if ($this->inlineParentheses) {
-
                 if ($this->stringIsClosingParentheses($token)) {
                     $this->writeInlineParenthesesBlock($tab, $queryValue);
                     continue;
@@ -122,7 +120,6 @@ class Formatter
             }
 
             if ($this->stringIsOpeningParentheses($token)) {
-
                 $length = 0;
                 for ($j = 1; $j <= 250; $j++) {
                     if (isset($tokens[$i + $j])) {
@@ -146,14 +143,10 @@ class Formatter
                 }
 
                 $this->addNewLineAfterOpeningParentheses();
-
             } elseif ($this->stringIsClosingParentheses($token)) {
-
                 $this->decreaseIndentLevelUntilIndentTypeIsSpecial();
                 $this->addNewLineBeforeClosingParentheses($addedNewline, $tab);
-
             } elseif ($this->isTokenTypeReservedTopLevel($token)) {
-
                 $this->increaseSpecialIndent = true;
                 $this->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
                 $this->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
@@ -162,15 +155,10 @@ class Formatter
                     $queryValue = preg_replace('/\s+/', ' ', $queryValue);
                 }
                 $this->tokenHasLimitClause($token);
-
             } elseif ($this->stringIsEndOfLimitClause($token)) {
-
                 $this->clauseLimit = false;
-
             } elseif ($token[Tokenizer::TOKEN_VALUE] === ',' && !$this->inlineParentheses) {
-
                 $this->writeNewLineBecauseOfComma();
-
             } elseif ($this->isTokenTypeReservedNewLine($token)) {
                 $this->writeNewLineBeforeReservedWord($addedNewline, $tab);
 

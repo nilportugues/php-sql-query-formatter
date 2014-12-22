@@ -751,7 +751,6 @@ class Tokenizer
             $oldStringLength     = strlen($string) + 1;
 
             while ($currentStringLength >= 0) {
-
                 if ($oldStringLength <= $currentStringLength) {
                     break;
                 }
@@ -861,7 +860,6 @@ class Tokenizer
         }
 
         if ($this->isReservedPrecededByDotCharacter($previous)) {
-
             if ($this->isReservedTopLevelString($string, $matches)) {
                 return $this->getReservedTopLevelString($string, $matches);
             }
@@ -930,7 +928,6 @@ class Tokenizer
             // Comment until end of line
             $last = strpos($string, "\n");
             $type = self::TOKEN_TYPE_COMMENT;
-
         } else {
             // Comment until closing comment tag
             $last = strpos($string, "*/", 2) + 2;
@@ -1029,7 +1026,6 @@ class Tokenizer
 
         if ($string[1] === '"' || $string[1] === '\'' || $string[1] === '`') {
             $returnData[self::TOKEN_VALUE] = '@' . $this->wrapStringWithQuotes(substr($string, 1));
-
         } else {
             $matches = array();
             preg_match('/^(@[a-zA-Z0-9\._\$]+)/', $string, $matches);

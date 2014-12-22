@@ -15,8 +15,13 @@
         }
     ],
     "autoload":{
-        "psr-0":{
-            "NilPortugues\\SqlQueryFormatter":"src/"
+        "psr-4":{
+            "NilPortugues\\SqlQueryFormatter\\":"src/"
+        }
+    },
+    "autoload-dev":{
+        "psr-4":{
+            "Tests\\NilPortugues\\SqlQueryFormatter\\":"tests/"
         }
     },
     "require":
@@ -34,7 +39,6 @@
         "fabpot/php-cs-fixer": "dev-master",
         "pdepend/pdepend": "2.*",
         "phpmd/phpmd": "dev-master",
-        "goatherd/phpcs_installer": "2.*@dev",
         "squizlabs/php_codesniffer": "2.*@dev",
         "fiunchinho/phpunit-randomizer": "1.0.*@dev"
     },

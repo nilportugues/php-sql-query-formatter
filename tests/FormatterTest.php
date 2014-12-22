@@ -8,7 +8,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\NilPortugues\SqlQueryFormatter\Helper;
+namespace Tests\NilPortugues\SqlQueryFormatter;
 
 use NilPortugues\SqlQueryFormatter\Formatter;
 
@@ -72,4 +72,3 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($indented, $result);
     }
 }
- 

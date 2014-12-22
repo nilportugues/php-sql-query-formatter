@@ -450,6 +450,5 @@ SQL;
             }
         }
         $this->assertTrue($functionFound);
-
     }
 }
