@@ -228,15 +228,7 @@ class Tokenizer
             return Boundary::getBoundaryCharacter($matches);
         }
 
-        $isReserved = Reserved::isReserved(
-            $matches,
-            $previous,
-            $string,
-            $this->regexReservedTopLevel,
-            $this->regexReservedNewLine,
-            $this->regexBoundaries,
-            $this->regexReserved
-        );
+        $isReserved = Reserved::isReserved($matches, $previous, $string, $this);
 
         if (0 !== count($isReserved)) {
             return $isReserved;
@@ -259,5 +251,45 @@ class Tokenizer
     protected function quoteRegex($string)
     {
         return preg_quote($string, '/');
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexBoundaries()
+    {
+        return $this->regexBoundaries;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexFunction()
+    {
+        return $this->regexFunction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexReserved()
+    {
+        return $this->regexReserved;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexReservedNewLine()
+    {
+        return $this->regexReservedNewLine;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRegexReservedTopLevel()
+    {
+        return $this->regexReservedTopLevel;
     }
 }

@@ -19,36 +19,25 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Reserved
 {
     /**
-     * @param array  $matches
+     * @param array $matches
      * @param string $previous
      * @param string $string
-     * @param string $reservedTopLevel
-     * @param string $reservedNewLine
-     * @param string $boundaries
-     * @param string $reserved
+     * @param Tokenizer $tokenizer
      *
      * @return array
      */
-    public static function isReserved(
-        array &$matches,
-        $previous,
-        $string,
-        $reservedTopLevel,
-        $reservedNewLine,
-        $boundaries,
-        $reserved
-    ) {
+    public static function isReserved(array &$matches, $previous, $string, Tokenizer $tokenizer)
+    {
         $tokenData = [];
 
         if (Reserved::isReservedPrecededByDotCharacter($previous)) {
-
             Reserved::getReservedString(
                 $tokenData,
                 Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL,
                 $string,
                 $matches,
-                $reservedTopLevel,
-                $boundaries
+                $tokenizer->getRegexReservedTopLevel(),
+                $tokenizer->getRegexBoundaries()
             );
 
             Reserved::getReservedString(
@@ -56,8 +45,8 @@ final class Reserved
                 Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE,
                 strtoupper($string),
                 $matches,
-                $reservedNewLine,
-                $boundaries
+                $tokenizer->getRegexReservedNewLine(),
+                $tokenizer->getRegexBoundaries()
             );
 
             Reserved::getReservedString(
@@ -65,8 +54,8 @@ final class Reserved
                 Tokenizer::TOKEN_TYPE_RESERVED,
                 $string,
                 $matches,
-                $reserved,
-                $boundaries
+                $tokenizer->getRegexReserved(),
+                $tokenizer->getRegexBoundaries()
             );
         }
 
