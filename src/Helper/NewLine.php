@@ -11,6 +11,7 @@
 namespace NilPortugues\SqlQueryFormatter\Helper;
 
 use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class NewLine
@@ -148,8 +149,8 @@ class NewLine
         $this->newline = true;
 
         if (true === $this->formatter->getClauseLimit()) {
-            $this->newline     = false;
-            $this->clauseLimit = false;
+            $this->newline = false;
+            $this->formatter->setClauseLimit(false);
         }
     }
 
@@ -175,6 +176,14 @@ class NewLine
     }
 
     /**
+     * @return boolean
+     */
+    public function getNewline()
+    {
+        return $this->newline;
+    }
+
+    /**
      * @param boolean $newline
      *
      * @return $this
@@ -183,13 +192,5 @@ class NewLine
     {
         $this->newline = $newline;
         return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function getNewline()
-    {
-        return $this->newline;
     }
 }

@@ -46,6 +46,8 @@ class Indent
 
     /**
      * Increase the Special Indent if increaseSpecialIndent is true after the current iteration.
+     *
+     * @return $this
      */
     public function increaseSpecialIndent()
     {
@@ -54,10 +56,13 @@ class Indent
             $this->increaseSpecialIndent = false;
             array_unshift($this->indentTypes, 'special');
         }
+        return $this;
     }
 
     /**
      * Increase the Block Indent if increaseBlockIndent is true after the current iteration.
+     *
+     * @return $this
      */
     public function increaseBlockIndent()
     {
@@ -66,10 +71,15 @@ class Indent
             $this->increaseBlockIndent = false;
             array_unshift($this->indentTypes, 'block');
         }
+        return $this;
     }
 
     /**
      * Closing parentheses decrease the block indent level.
+     *
+     * @param Formatter $formatter
+     *
+     * @return $this
      */
     public function decreaseIndentLevelUntilIndentTypeIsSpecial(Formatter $formatter)
     {
@@ -77,15 +87,16 @@ class Indent
         $this->indentLvl--;
 
         while ($j = array_shift($this->indentTypes)) {
-            if ($j === 'special') {
-                $this->indentLvl--;
-            } else {
+            if ('special' !== $j) {
                 break;
             }
+            $this->indentLvl--;
         }
+        return $this;
     }
 
     /**
+     * @return $this
      */
     public function decreaseSpecialIndentIfCurrentIndentTypeIsSpecial()
     {
@@ -95,6 +106,7 @@ class Indent
             $this->indentLvl--;
             array_shift($this->indentTypes);
         }
+        return $this;
     }
 
     /**

@@ -11,6 +11,7 @@
 namespace NilPortugues\SqlQueryFormatter\Helper;
 
 use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class Parentheses

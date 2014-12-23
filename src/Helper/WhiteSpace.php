@@ -10,6 +10,8 @@
 
 namespace NilPortugues\SqlQueryFormatter\Helper;
 
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+
 /**
  * Class WhiteSpace
  * @package NilPortugues\SqlQueryFormatter\Helper

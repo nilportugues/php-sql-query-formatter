@@ -13,8 +13,8 @@ use NilPortugues\SqlQueryFormatter\Helper\Comment;
 use NilPortugues\SqlQueryFormatter\Helper\Indent;
 use NilPortugues\SqlQueryFormatter\Helper\NewLine;
 use NilPortugues\SqlQueryFormatter\Helper\Parentheses;
-use NilPortugues\SqlQueryFormatter\Helper\Tokenizer;
 use NilPortugues\SqlQueryFormatter\Helper\WhiteSpace;
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Lightweight Formatter heavily based on https://github.com/jdorn/sql-formatter.
@@ -84,8 +84,9 @@ class Formatter
         foreach ($tokens as $i => $token) {
             $queryValue = $token[Tokenizer::TOKEN_VALUE];
 
-            $this->indentation->increaseSpecialIndent($this);
-            $this->indentation->increaseBlockIndent($this);
+            $this->indentation
+                ->increaseSpecialIndent()
+                ->increaseBlockIndent();
 
             $addedNewline = $this->newLine->addNewLineBreak($tab);
 

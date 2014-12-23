@@ -8,9 +8,9 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\NilPortugues\SqlQueryFormatter\Helper;
+namespace Tests\NilPortugues\SqlQueryFormatter\Tokenizer;
 
-use NilPortugues\SqlQueryFormatter\Helper\Tokenizer;
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class TokenizerTest
