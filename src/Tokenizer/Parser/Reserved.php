@@ -41,17 +41,9 @@ final class Reserved
         $reservedArray = [];
 
         if (Reserved::isReservedPrecededByDotCharacter($previous)) {
-            if (Reserved::isReservedString($string, $matches, $reservedTopLevel, $boundaries)) {
-                $reservedArray = Reserved::getReservedTopLevelString($string, $matches);
-            }
-
-            if (empty($reservedArray) && Reserved::isReservedString($string, $matches, $reservedNewLine, $boundaries)) {
-                $reservedArray = Reserved::getReservedNewLineString($string, $matches);
-            }
-
-            if (empty($reservedArray) && Reserved::isReservedString($string, $matches, $reserved, $boundaries)) {
-                $reservedArray = Reserved::getReservedString($string, $matches);
-            }
+            Reserved::getReservedTopLevelString($reservedArray, $string, $matches, $reservedTopLevel, $boundaries);
+            Reserved::getReservedNewLineString($reservedArray, $string, $matches, $reservedNewLine, $boundaries);
+            Reserved::getReservedString($reservedArray, $string, $matches, $reserved, $boundaries);
         }
 
         return $reservedArray;
@@ -67,6 +59,27 @@ final class Reserved
     public static function isReservedPrecededByDotCharacter($previous)
     {
         return !$previous || !isset($previous[Tokenizer::TOKEN_VALUE]) || $previous[Tokenizer::TOKEN_VALUE] !== '.';
+    }
+
+    /**
+     * @param array        $reservedArray
+     * @param       string $string
+     * @param array        $matches
+     * @param              $reservedTopLevel
+     * @param              $boundaries
+     *
+     * @return array
+     */
+    public static function getReservedTopLevelString(
+        array &$reservedArray,
+        $string,
+        array &$matches,
+        $reservedTopLevel,
+        $boundaries
+    ) {
+        if (empty($reservedArray) && Reserved::isReservedString($string, $matches, $reservedTopLevel, $boundaries)) {
+            $reservedArray = self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL, $string, $matches);
+        }
     }
 
     /**
@@ -87,17 +100,6 @@ final class Reserved
     }
 
     /**
-     * @param       string $string
-     * @param array        $matches
-     *
-     * @return array
-     */
-    public static function getReservedTopLevelString($string, array &$matches)
-    {
-        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL, $string, $matches);
-    }
-
-    /**
      * @param              $type
      * @param       string $string
      * @param array        $matches
@@ -113,24 +115,43 @@ final class Reserved
     }
 
     /**
+     * @param array        $reservedArray
      * @param       string $string
      * @param array        $matches
+     * @param              $reservedNewLine
+     * @param              $boundaries
      *
      * @return array
      */
-    public static function getReservedNewLineString($string, array &$matches)
-    {
-        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE, strtoupper($string), $matches);
+    public static function getReservedNewLineString(
+        array &$reservedArray,
+        $string,
+        array &$matches,
+        $reservedNewLine,
+        $boundaries
+    ) {
+        if (empty($reservedArray) && Reserved::isReservedString($string, $matches, $reservedNewLine, $boundaries)) {
+            $reservedArray = self::getStringTypeArray(
+                Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE,
+                strtoupper($string),
+                $matches
+            );
+        }
     }
 
     /**
-     * @param       string $string
+     * @param array        $reservedArray
+     * @param string       $string
      * @param array        $matches
+     * @param              $reserved
+     * @param              $boundaries
      *
      * @return array
      */
-    public static function getReservedString($string, array &$matches)
+    public static function getReservedString(array &$reservedArray, $string, array &$matches, $reserved, $boundaries)
     {
-        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED, $string, $matches);
+        if (empty($reservedArray) && Reserved::isReservedString($string, $matches, $reserved, $boundaries)) {
+            $reservedArray = self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED, $string, $matches);
+        }
     }
 }
