@@ -13,6 +13,7 @@ use NilPortugues\SqlQueryFormatter\Helper\Comment;
 use NilPortugues\SqlQueryFormatter\Helper\Indent;
 use NilPortugues\SqlQueryFormatter\Helper\NewLine;
 use NilPortugues\SqlQueryFormatter\Helper\Parentheses;
+use NilPortugues\SqlQueryFormatter\Helper\Token;
 use NilPortugues\SqlQueryFormatter\Helper\WhiteSpace;
 use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 
@@ -78,7 +79,7 @@ class Formatter
         $this->reset();
         $tab = "\t";
 
-        $originalTokens = $this->tokenizer->tokenize((string) $sql);
+        $originalTokens = $this->tokenizer->tokenize((string)$sql);
         $tokens         = WhiteSpace::removeTokenWhitespace($originalTokens);
 
         foreach ($tokens as $i => $token) {
@@ -133,7 +134,7 @@ class Formatter
             } elseif ($this->parentheses->stringIsClosingParentheses($token)) {
                 $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
                 $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
-            } elseif ($this->isTokenTypeReservedTopLevel($token)) {
+            } elseif (Token::isTokenTypeReservedTopLevel($token)) {
                 $this->indentation
                     ->setIncreaseSpecialIndent(true)
                     ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
@@ -143,7 +144,7 @@ class Formatter
                 if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
                     $queryValue = preg_replace('/\s+/', ' ', $queryValue);
                 }
-                $this->tokenHasLimitClause($token);
+                Token::tokenHasLimitClause($token, $this->parentheses, $this);
             } elseif ($this->stringIsEndOfLimitClause($token)) {
                 $this->clauseLimit = false;
             } elseif (
@@ -159,7 +160,7 @@ class Formatter
                 }
             }
 
-            if ($this->tokenHasMultipleBoundaryCharactersTogether($token, $tokens, $i, $originalTokens)) {
+            if (Token::tokenHasMultipleBoundaryCharactersTogether($token, $tokens, $i, $originalTokens)) {
                 $this->formattedSql = rtrim($this->formattedSql, ' ');
             }
 
@@ -173,7 +174,7 @@ class Formatter
                 $this->formattedSql = rtrim($this->formattedSql, ' ');
             }
 
-            if ($this->tokenIsMinusSign($token, $tokens, $i)) {
+            if (Token::tokenIsMinusSign($token, $tokens, $i)) {
                 $previousTokenType = $tokens[$i - 1][Tokenizer::TOKEN_TYPE];
 
                 if (WhiteSpace::tokenIsNumberAndHasExtraWhiteSpaceRight($previousTokenType)) {
@@ -205,65 +206,12 @@ class Formatter
      *
      * @return bool
      */
-    protected function isTokenTypeReservedTopLevel($token)
-    {
-        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL;
-    }
-
-    /**
-     * @param $token
-     */
-    protected function tokenHasLimitClause($token)
-    {
-        if ('LIMIT' === $token[Tokenizer::TOKEN_VALUE] && false === $this->parentheses->getInlineParentheses()) {
-            $this->clauseLimit = true;
-        }
-    }
-
-    /**
-     * @param $token
-     *
-     * @return bool
-     */
     protected function stringIsEndOfLimitClause($token)
     {
         return $this->clauseLimit
         && $token[Tokenizer::TOKEN_VALUE] !== ","
         && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_NUMBER
         && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
-    }
-
-
-    /**
-     * @param $token
-     * @param $tokens
-     * @param $i
-     * @param $originalTokens
-     *
-     * @return bool
-     */
-    protected function tokenHasMultipleBoundaryCharactersTogether($token, &$tokens, $i, &$originalTokens)
-    {
-        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
-        && isset($tokens[$i - 1])
-        && $tokens[$i - 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
-        && isset($originalTokens[$token['i'] - 1])
-        && $originalTokens[$token['i'] - 1][Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
-    }
-
-    /**
-     * @param $token
-     * @param $tokens
-     * @param $i
-     *
-     * @return bool
-     */
-    protected function tokenIsMinusSign($token, &$tokens, $i)
-    {
-        return '-' === $token[Tokenizer::TOKEN_VALUE]
-        && isset($tokens[$i + 1])
-        && $tokens[$i + 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_NUMBER
-        && isset($tokens[$i - 1]);
     }
 
     /**

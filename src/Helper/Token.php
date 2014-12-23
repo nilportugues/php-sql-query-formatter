@@ -10,6 +10,9 @@
 
 namespace NilPortugues\SqlQueryFormatter\Helper;
 
+use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+
 /**
  * Class Token
  * @package NilPortugues\SqlQueryFormatter\Helper
@@ -658,4 +661,91 @@ final class Token
         '&',
         '#'
     ];
+
+
+    /**
+     * @param $token
+     *
+     * @return bool
+     */
+    public static function isTokenTypeReservedTopLevel($token)
+    {
+        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL;
+    }
+
+    /**
+     * @param string $token
+     * @param Parentheses $parentheses
+     * @param Formatter $formatter
+     */
+    public static function tokenHasLimitClause($token, Parentheses $parentheses, Formatter $formatter)
+    {
+        if ('LIMIT' === $token[Tokenizer::TOKEN_VALUE] && false === $parentheses->getInlineParentheses()) {
+            $formatter->setClauseLimit(true);
+        }
+    }
+
+    /**
+     * @param $token
+     * @param $tokens
+     * @param $i
+     * @param $originalTokens
+     *
+     * @return bool
+     */
+    public static function tokenHasMultipleBoundaryCharactersTogether($token, &$tokens, $i, &$originalTokens)
+    {
+        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
+        && self::tokenPreviousCharacterIsBoundary($tokens, $i)
+        && self::tokenPreviousCharacterIsWhiteSpace($token, $originalTokens);
+    }
+
+    /**
+     * @param $tokens
+     * @param $i
+     *
+     * @return bool
+     */
+    public static function tokenPreviousCharacterIsBoundary(&$tokens, $i)
+    {
+        return (isset($tokens[$i - 1]) && $tokens[$i - 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY);
+    }
+
+    /**
+     * @param $token
+     * @param $originalTokens
+     *
+     * @return bool
+     */
+    public static function tokenPreviousCharacterIsWhiteSpace($token, &$originalTokens)
+    {
+        return (isset($originalTokens[$token['i'] - 1])
+            && $originalTokens[$token['i'] - 1][Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE);
+    }
+
+    /**
+     * @param $token
+     * @param $tokens
+     * @param $i
+     *
+     * @return bool
+     */
+    public static function tokenIsMinusSign($token, &$tokens, $i)
+    {
+        return '-' === $token[Tokenizer::TOKEN_VALUE]
+        && self::tokenNextCharacterIsNumber($tokens, $i)
+        && isset($tokens[$i - 1]);
+    }
+
+    /**
+     * @param $tokens
+     * @param $i
+     *
+     * @return bool
+     */
+    public static function tokenNextCharacterIsNumber(&$tokens, $i)
+    {
+        return (isset($tokens[$i + 1])
+            && $tokens[$i + 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_NUMBER);
+    }
 }
