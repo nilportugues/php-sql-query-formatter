@@ -20,7 +20,7 @@ final class Reserved
 {
     /**
      * @param array $matches
-     * @param string $previous
+     * @param array|null $previous
      * @param string $string
      * @param Tokenizer $tokenizer
      *
@@ -108,12 +108,12 @@ final class Reserved
     }
 
     /**
-     * @param array        $tokenData
-     * @param              $type
-     * @param string       $string
-     * @param array        $matches
-     * @param              $regex
-     * @param              $boundaries
+     * @param array $tokenData
+     * @param string $type
+     * @param string $string
+     * @param array $matches
+     * @param string $regex
+     * @param string $boundaries
      *
      * @return array
      */
