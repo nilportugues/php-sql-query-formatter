@@ -21,7 +21,7 @@ final class Boundary
     /**
      * @param       string $string
      * @param array        $matches
-     * @param              $regexBoundaries
+     * @param              string $regexBoundaries
      *
      * @return bool
      */
