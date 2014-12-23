@@ -39,10 +39,7 @@ final class Reserved
      */
     public static function getReservedTopLevelString($string, array &$matches)
     {
-        return [
-            Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL,
-            Tokenizer::TOKEN_VALUE => substr($string, 0, strlen($matches[1]))
-        ];
+        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL, $string, $matches);
     }
 
 
@@ -54,12 +51,7 @@ final class Reserved
      */
     public static function getReservedNewLineString($string, array &$matches)
     {
-        $string = strtoupper($string);
-
-        return [
-            Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE,
-            Tokenizer::TOKEN_VALUE => substr($string, 0, strlen($matches[1]))
-        ];
+        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE, strtoupper($string), $matches);
     }
 
     /**
@@ -87,8 +79,20 @@ final class Reserved
      */
     public static function getReservedString($string, array &$matches)
     {
+        return self::getStringTypeArray(Tokenizer::TOKEN_TYPE_RESERVED, $string, $matches);
+    }
+
+    /**
+     * @param       $type
+     * @param       $string
+     * @param array $matches
+     *
+     * @return array
+     */
+    protected static function getStringTypeArray($type, $string, array &$matches)
+    {
         return [
-            Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_RESERVED,
+            Tokenizer::TOKEN_TYPE  => $type,
             Tokenizer::TOKEN_VALUE => substr($string, 0, strlen($matches[1]))
         ];
     }
