@@ -132,7 +132,7 @@ class Formatter
                 $this->newLine->addNewLineAfterOpeningParentheses();
             } elseif ($this->parentheses->stringIsClosingParentheses($token)) {
                 $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
-                $this->newLine->addNewLineBeforeClosingParentheses($addedNewline, $tab);
+                $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
             } elseif ($this->isTokenTypeReservedTopLevel($token)) {
                 $this->indentation
                     ->setIncreaseSpecialIndent(true)
@@ -152,7 +152,7 @@ class Formatter
             ) {
                 $this->newLine->writeNewLineBecauseOfComma();
             } elseif ($this->newLine->isTokenTypeReservedNewLine($token)) {
-                $this->newLine->writeNewLineBeforeReservedWord($addedNewline, $tab);
+                $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
 
                 if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
                     $queryValue = preg_replace('/\s+/', ' ', $queryValue);

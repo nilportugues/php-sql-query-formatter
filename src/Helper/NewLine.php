@@ -112,7 +112,7 @@ class NewLine
      * @param boolean $addedNewline
      * @param string  $tab
      */
-    public function addNewLineBeforeClosingParentheses($addedNewline, $tab)
+    public function addNewLineBeforeToken($addedNewline, $tab)
     {
         if (false === $addedNewline) {
             $this->formatter->appendToFormattedSql(
@@ -162,17 +162,6 @@ class NewLine
     public function isTokenTypeReservedNewLine($token)
     {
         return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE;
-    }
-
-    /**
-     * @param boolean $addedNewline
-     * @param string  $tab
-     */
-    public function writeNewLineBeforeReservedWord($addedNewline, $tab)
-    {
-        if (false === $addedNewline) {
-            $this->formatter->appendToFormattedSql("\n" . str_repeat($tab, $this->indentation->getIndentLvl()));
-        }
     }
 
     /**
