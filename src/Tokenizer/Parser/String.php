@@ -24,7 +24,7 @@ final class String
      *
      * @param   string $string
      * @param array    $matches
-     * @param          $regexFunction
+     * @param          string $regexFunction
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ final class String
 
     /**
      * @param string $string
-     * @param        $regexBoundaries
+     * @param        string $regexBoundaries
      *
      * @return array
      */

@@ -33,8 +33,8 @@ final class Reserved
     /**
      * @param       string $string
      * @param array        $matches
-     * @param              $regexReservedTopLevel
-     * @param              $regexBoundaries
+     * @param              string $regexReservedTopLevel
+     * @param              string $regexBoundaries
      *
      * @return bool
      */
@@ -64,8 +64,8 @@ final class Reserved
     /**
      * @param string $string
      * @param        $matches
-     * @param        $regexReservedNewLine
-     * @param        $regexBoundaries
+     * @param        string $regexReservedNewLine
+     * @param        string $regexBoundaries
      *
      * @return bool
      */
@@ -97,8 +97,8 @@ final class Reserved
     /**
      * @param       string $upper
      * @param array        $matches
-     * @param              $regexReserved
-     * @param              $regexBoundaries
+     * @param              string $regexReserved
+     * @param              string $regexBoundaries
      *
      * @return bool
      */
