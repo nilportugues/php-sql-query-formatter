@@ -228,30 +228,18 @@ class Tokenizer
             return Boundary::getBoundaryCharacter($matches);
         }
 
-        if (Reserved::isReservedPrecededByDotCharacter($previous)) {
-            if (Reserved::isReservedString(
-                $string,
-                $matches,
-                $this->regexReservedTopLevel,
-                $this->regexBoundaries
-            )
-            ) {
-                return Reserved::getReservedTopLevelString($string, $matches);
-            }
+        $isReserved = Reserved::isReserved(
+            $matches,
+            $previous,
+            $string,
+            $this->regexReservedTopLevel,
+            $this->regexReservedNewLine,
+            $this->regexBoundaries,
+            $this->regexReserved
+        );
 
-            if (Reserved::isReservedString(
-                $string,
-                $matches,
-                $this->regexReservedNewLine,
-                $this->regexBoundaries
-            )
-            ) {
-                return Reserved::getReservedNewLineString($string, $matches);
-            }
-
-            if (Reserved::isReservedString($string, $matches, $this->regexReserved, $this->regexBoundaries)) {
-                return Reserved::getReservedString($string, $matches);
-            }
+        if (0 !== count($isReserved)) {
+            return $isReserved;
         }
 
         if (String::isFunctionString($string, $matches, $this->regexFunction)) {
