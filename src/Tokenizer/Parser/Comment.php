@@ -25,13 +25,37 @@ final class Comment
      */
     public static function isCommentString($string)
     {
-        return
-            $string[0] === '#'
-            || (
-                isset($string[1])
-                && ($string[0] === '-' && $string[1] === '-')
-                || ($string[0] === '/' && $string[1] === '*')
-            );
+        return $string[0] === '#' || self::isTwoCharacterComment($string);
+    }
+
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
+    protected static function isTwoCharacterComment($string)
+    {
+        return isset($string[1]) && (self::startsWithDoubleDash($string) || self::startsAsBlock($string));
+    }
+
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
+    protected static function startsWithDoubleDash($string)
+    {
+        return $string[0] === '-' && ($string[1] === $string[0]);
+    }
+
+    /**
+     * @param $string
+     *
+     * @return bool
+     */
+    protected static function startsAsBlock($string)
+    {
+        return $string[0] === '/' && $string[1] === '*';
     }
 
     /**
