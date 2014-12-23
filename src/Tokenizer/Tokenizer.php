@@ -230,7 +230,7 @@ class Tokenizer
         }
 
         if (Reserved::isReservedPrecededByDotCharacter($previous)) {
-            if (Reserved::isReservedTopLevelString(
+            if (Reserved::isReservedString(
                 $string,
                 $matches,
                 $this->regexReservedTopLevel,
@@ -240,7 +240,7 @@ class Tokenizer
                 return Reserved::getReservedTopLevelString($string, $matches);
             }
 
-            if (Reserved::isReservedNewLineString(
+            if (Reserved::isReservedString(
                 $string,
                 $matches,
                 $this->regexReservedNewLine,

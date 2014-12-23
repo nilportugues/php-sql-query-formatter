@@ -30,22 +30,6 @@ final class Reserved
         return !$previous || !isset($previous[Tokenizer::TOKEN_VALUE]) || $previous[Tokenizer::TOKEN_VALUE] !== '.';
     }
 
-    /**
-     * @param       string $string
-     * @param array        $matches
-     * @param              string $regexReservedTopLevel
-     * @param              string $regexBoundaries
-     *
-     * @return bool
-     */
-    public static function isReservedTopLevelString($string, array &$matches, $regexReservedTopLevel, $regexBoundaries)
-    {
-        return 1 == preg_match(
-            '/^(' . $regexReservedTopLevel . ')($|\s|' . $regexBoundaries . ')/',
-            strtoupper($string),
-            $matches
-        );
-    }
 
     /**
      * @param       string $string
@@ -61,22 +45,6 @@ final class Reserved
         ];
     }
 
-    /**
-     * @param string $string
-     * @param        $matches
-     * @param        string $regexReservedNewLine
-     * @param        string $regexBoundaries
-     *
-     * @return bool
-     */
-    public static function isReservedNewLineString($string, &$matches, $regexReservedNewLine, $regexBoundaries)
-    {
-        return 1 == preg_match(
-            '/^(' . $regexReservedNewLine . ')($|\s|' . $regexBoundaries . ')/',
-            strtoupper($string),
-            $matches
-        );
-    }
 
     /**
      * @param       string $string
