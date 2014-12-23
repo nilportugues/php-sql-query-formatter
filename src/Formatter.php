@@ -78,7 +78,7 @@ class Formatter
         $this->reset();
         $tab = "\t";
 
-        $originalTokens = $this->tokenizer->tokenize($sql);
+        $originalTokens = $this->tokenizer->tokenize((string) $sql);
         $tokens         = WhiteSpace::removeTokenWhitespace($originalTokens);
 
         foreach ($tokens as $i => $token) {
@@ -136,7 +136,7 @@ class Formatter
             } elseif ($this->isTokenTypeReservedTopLevel($token)) {
                 $this->indentation
                     ->setIncreaseSpecialIndent(true)
-                    ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial($this);
+                    ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
 
                 $this->newLine->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
 

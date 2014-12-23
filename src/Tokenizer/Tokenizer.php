@@ -107,9 +107,8 @@ class Tokenizer
      * Takes a SQL string and breaks it into tokens.
      * Each token is an associative array with type and value.
      *
-     * @param String $string The SQL string
-     *
-     * @return Array An array of tokens.
+     * @param string $string
+     * @return array
      */
     public function tokenize($string)
     {
