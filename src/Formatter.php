@@ -9,6 +9,7 @@
  */
 namespace NilPortugues\SqlQueryFormatter;
 
+use NilPortugues\SqlQueryFormatter\Helper\Comment;
 use NilPortugues\SqlQueryFormatter\Helper\Indent;
 use NilPortugues\SqlQueryFormatter\Helper\NewLine;
 use NilPortugues\SqlQueryFormatter\Helper\Parentheses;
@@ -61,6 +62,11 @@ class Formatter
     protected $indentation;
 
     /**
+     * @var Comment
+     */
+    protected $comment;
+
+    /**
      * Returns a SQL string in a readable human-friendly format.
      *
      * @param string $sql
@@ -83,8 +89,8 @@ class Formatter
 
             $addedNewline = $this->newLine->addNewLineBreak($tab);
 
-            if ($this->stringHasCommentToken($token)) {
-                $this->formattedSql = $this->writeCommentBlock($token, $tab, $queryValue);
+            if ($this->comment->stringHasCommentToken($token)) {
+                $this->formattedSql = $this->comment->writeCommentBlock($token, $tab, $queryValue);
                 continue;
             }
 
@@ -127,8 +133,10 @@ class Formatter
                 $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
                 $this->newLine->addNewLineBeforeClosingParentheses($addedNewline, $tab);
             } elseif ($this->isTokenTypeReservedTopLevel($token)) {
-                $this->indentation->setIncreaseSpecialIndent(true);
-                $this->indentation->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial($this);
+                $this->indentation
+                    ->setIncreaseSpecialIndent(true)
+                    ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial($this);
+
                 $this->newLine->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
 
                 if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
@@ -185,43 +193,11 @@ class Formatter
         $this->indentation = new Indent();
         $this->parentheses = new Parentheses($this, $this->indentation);
         $this->newLine     = new NewLine($this, $this->indentation, $this->parentheses);
+        $this->comment     = new Comment($this, $this->indentation, $this->newLine);
 
         $this->formattedSql = '';
     }
 
-
-    /**
-     * @param $token
-     *
-     * @return bool
-     */
-    protected function stringHasCommentToken($token)
-    {
-        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_COMMENT
-        || $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT;
-    }
-
-    /**
-     * @param        $token
-     * @param string $tab
-     * @param        $queryValue
-     *
-     * @return string
-     */
-    protected function writeCommentBlock($token, $tab, $queryValue)
-    {
-        if ($token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT) {
-            $indent = str_repeat($tab, $this->indentation->getIndentLvl());
-
-            $this->formattedSql .= "\n" . $indent;
-            $queryValue = str_replace("\n", "\n" . $indent, $queryValue);
-        }
-
-        $this->formattedSql .= $queryValue;
-        $this->newLine->setNewline(true);
-
-        return $this->formattedSql;
-    }
 
     /**
      * @param $token
@@ -238,7 +214,7 @@ class Formatter
      */
     protected function tokenHasLimitClause($token)
     {
-        if ($token[Tokenizer::TOKEN_VALUE] === 'LIMIT' && false === $this->parentheses->getInlineParentheses()) {
+        if ('LIMIT' === $token[Tokenizer::TOKEN_VALUE] && false === $this->parentheses->getInlineParentheses()) {
             $this->clauseLimit = true;
         }
     }
@@ -250,11 +226,10 @@ class Formatter
      */
     protected function stringIsEndOfLimitClause($token)
     {
-        return
-            $this->clauseLimit
-            && $token[Tokenizer::TOKEN_VALUE] !== ","
-            && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_NUMBER
-            && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
+        return $this->clauseLimit
+        && $token[Tokenizer::TOKEN_VALUE] !== ","
+        && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_NUMBER
+        && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
     }
 
 
@@ -268,12 +243,11 @@ class Formatter
      */
     protected function tokenHasMultipleBoundaryCharactersTogether($token, &$tokens, $i, &$originalTokens)
     {
-        return
-            $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
-            && isset($tokens[$i - 1])
-            && $tokens[$i - 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
-            && isset($originalTokens[$token['i'] - 1])
-            && $originalTokens[$token['i'] - 1][Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
+        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
+        && isset($tokens[$i - 1])
+        && $tokens[$i - 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BOUNDARY
+        && isset($originalTokens[$token['i'] - 1])
+        && $originalTokens[$token['i'] - 1][Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
     }
 
     /**
@@ -285,7 +259,7 @@ class Formatter
      */
     protected function tokenIsMinusSign($token, &$tokens, $i)
     {
-        return $token[Tokenizer::TOKEN_VALUE] === '-'
+        return '-' === $token[Tokenizer::TOKEN_VALUE]
         && isset($tokens[$i + 1])
         && $tokens[$i + 1][Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_NUMBER
         && isset($tokens[$i - 1]);

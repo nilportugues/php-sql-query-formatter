@@ -10,10 +10,71 @@
 
 namespace NilPortugues\SqlQueryFormatter\Helper;
 
+use NilPortugues\SqlQueryFormatter\Formatter;
+
 /**
  * Class Comment
  * @package NilPortugues\SqlQueryFormatter\Helper
  */
 class Comment
 {
+    /**
+     * @var \NilPortugues\SqlQueryFormatter\Formatter
+     */
+    protected $formatter;
+
+    /**
+     * @var Indent
+     */
+    protected $indentation;
+
+    /**
+     * @var NewLine
+     */
+    protected $newLine;
+
+    /**
+     * @param Formatter $formatter
+     * @param Indent    $indentation
+     * @param NewLine   $newLine
+     */
+    public function __construct(Formatter $formatter, Indent $indentation, NewLine $newLine)
+    {
+        $this->formatter = $formatter;
+        $this->indentation = $indentation;
+        $this->newLine = $newLine;
+    }
+
+    /**
+     * @param $token
+     *
+     * @return bool
+     */
+    public function stringHasCommentToken($token)
+    {
+        return $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_COMMENT
+        || $token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT;
+    }
+
+    /**
+     * @param        $token
+     * @param string $tab
+     * @param        $queryValue
+     *
+     * @return string
+     */
+    public function writeCommentBlock($token, $tab, $queryValue)
+    {
+        if ($token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT) {
+            $indent = str_repeat($tab, $this->indentation->getIndentLvl());
+
+            $this->formatter->appendToFormattedSql("\n" . $indent);
+            $queryValue = str_replace("\n", "\n" . $indent, $queryValue);
+        }
+
+        $this->formatter->appendToFormattedSql($queryValue);
+        $this->newLine->setNewline(true);
+
+        return $this->formatter->getFormattedSql();
+    }
 }
