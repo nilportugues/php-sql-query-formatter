@@ -84,7 +84,7 @@ final class Reserved
 
     /**
      * @param       $type
-     * @param       $string
+     * @param       string $string
      * @param array $matches
      *
      * @return array

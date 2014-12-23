@@ -29,7 +29,7 @@ final class Comment
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
