@@ -20,7 +20,7 @@ final class UserDefined
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      *
      * @return array
      */

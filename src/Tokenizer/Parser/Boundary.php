@@ -20,7 +20,7 @@ final class Boundary
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      * @param array     $matches
      */
     public static function isBoundary(Tokenizer $tokenizer, $string, array &$matches)

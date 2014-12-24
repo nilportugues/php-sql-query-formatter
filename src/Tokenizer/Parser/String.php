@@ -20,7 +20,7 @@ final class String
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      * @param array     $matches
      */
     public static function isFunction(Tokenizer $tokenizer, $string, array &$matches)
@@ -61,7 +61,7 @@ final class String
 
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      * @param array     $matches
      */
     public static function getNonReservedString(Tokenizer $tokenizer, $string, array &$matches)

@@ -20,7 +20,7 @@ final class WhiteSpace
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      * @param array     $matches
      */
     public static function isWhiteSpace(Tokenizer $tokenizer, $string, array &$matches)
