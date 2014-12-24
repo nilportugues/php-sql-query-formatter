@@ -19,6 +19,18 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class String
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     * @param array     $matches
+     */
+    public static function isFunction(Tokenizer $tokenizer, $string, array &$matches)
+    {
+        if (!$tokenizer->getNextToken() && self::isFunctionString($string, $matches, $tokenizer->getRegexFunction())) {
+            $tokenizer->setNextToken(self::getFunctionString($string, $matches));
+        }
+    }
+
+    /**
      * A function must be succeeded by '('.
      * This makes it so that a function such as "COUNT(" is considered a function, but "COUNT" alone is not function.
      *
@@ -28,7 +40,7 @@ final class String
      *
      * @return bool
      */
-    public static function isFunctionString($string, array &$matches, $regexFunction)
+    protected static function isFunctionString($string, array &$matches, $regexFunction)
     {
         return (1 == preg_match('/^(' . $regexFunction . '[(]|\s|[)])/', strtoupper($string), $matches));
     }
@@ -39,7 +51,7 @@ final class String
      *
      * @return array
      */
-    public static function getFunctionString($string, array &$matches)
+    protected static function getFunctionString($string, array &$matches)
     {
         return [
             Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_RESERVED,
@@ -48,23 +60,23 @@ final class String
     }
 
     /**
-     * @param string $string
-     * @param        string $regexBoundaries
-     *
-     * @return array
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     * @param array     $matches
      */
-    public static function getNonReservedString($string, $regexBoundaries)
+    public static function getNonReservedString(Tokenizer $tokenizer, $string, array &$matches)
     {
-        $data    = [];
-        $matches = [];
+        if (!$tokenizer->getNextToken()) {
+            $data    = [];
 
-        if (1 == preg_match('/^(.*?)($|\s|["\'`]|' . $regexBoundaries . ')/', $string, $matches)) {
-            $data = [
-                Tokenizer::TOKEN_VALUE => $matches[1],
-                Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_WORD
-            ];
+            if (1 == preg_match('/^(.*?)($|\s|["\'`]|' . $tokenizer->getRegexBoundaries() . ')/', $string, $matches)) {
+                $data = [
+                    Tokenizer::TOKEN_VALUE => $matches[1],
+                    Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_WORD
+                ];
+            }
+
+            $tokenizer->setNextToken($data);
         }
-
-        return $data;
     }
 }

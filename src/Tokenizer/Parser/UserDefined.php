@@ -18,13 +18,25 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
  */
 final class UserDefined
 {
+    /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     *
+     * @return array
+     */
+    public static function isUserDefinedVariable(Tokenizer $tokenizer, $string)
+    {
+        if (!$tokenizer->getNextToken() && self::isUserDefinedVariableString($string)) {
+            $tokenizer->setNextToken(self::getUserDefinedVariableString($string));
+        }
+    }
 
     /**
      * @param string $string
      *
      * @return bool
      */
-    public static function isUserDefinedVariableString(&$string)
+    protected static function isUserDefinedVariableString(&$string)
     {
         return $string[0] === '@' && isset($string[1]);
     }
@@ -36,7 +48,7 @@ final class UserDefined
      *
      * @return array
      */
-    public static function getUserDefinedVariableString(&$string)
+    protected static function getUserDefinedVariableString(&$string)
     {
         $returnData = [
             Tokenizer::TOKEN_VALUE => null,

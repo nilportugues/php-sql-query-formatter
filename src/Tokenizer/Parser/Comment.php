@@ -19,11 +19,22 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Comment
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     */
+    public static function isComment(Tokenizer $tokenizer, $string)
+    {
+        if (!$tokenizer->getNextToken() && Comment::isCommentString($string)) {
+            $tokenizer->setNextToken(Comment::getCommentString($string));
+        }
+    }
+
+    /**
      * @param string $string
      *
      * @return bool
      */
-    public static function isCommentString($string)
+    protected static function isCommentString($string)
     {
         return $string[0] === '#' || self::isTwoCharacterComment($string);
     }
@@ -63,7 +74,7 @@ final class Comment
      *
      * @return array
      */
-    public static function getCommentString($string)
+    protected static function getCommentString($string)
     {
         $last = strpos($string, "*/", 2) + 2;
         $type = Tokenizer::TOKEN_TYPE_BLOCK_COMMENT;

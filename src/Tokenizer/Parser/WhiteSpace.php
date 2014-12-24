@@ -19,6 +19,18 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class WhiteSpace
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     * @param array     $matches
+     */
+    public static function isWhiteSpace(Tokenizer $tokenizer, $string, array &$matches)
+    {
+        if (self::isWhiteSpaceString($string, $matches)) {
+            $tokenizer->setNextToken(self::getWhiteSpaceString($matches));
+        }
+    }
+
+    /**
      * @param       string $string
      * @param array        $matches
      *

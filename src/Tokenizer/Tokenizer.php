@@ -77,6 +77,13 @@ class Tokenizer
      */
     protected $tokenCache = [];
 
+
+    /**
+     * @var array
+     */
+    protected $nextToken = [];
+
+
     /**
      * Builds all the regular expressions needed to Tokenize the input.
      */
@@ -182,7 +189,7 @@ class Tokenizer
      */
     protected function getNextTokenFromString($string, $token, $cacheKey)
     {
-        $token = $this->getNextToken($string, $token);
+        $token = $this->parseNextToken($string, $token);
 
         if ($cacheKey && strlen($token[self::TOKEN_VALUE]) < $this->maxCacheKeySize) {
             $this->tokenCache[$cacheKey] = $token;
@@ -192,53 +199,49 @@ class Tokenizer
     }
 
     /**
+     * @param array $nextToken
+     *
+     * @return $this
+     */
+    public function setNextToken($nextToken)
+    {
+        $this->nextToken = $nextToken;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNextToken()
+    {
+        return $this->nextToken;
+    }
+
+    /**
      * Return the next token and token type in a SQL string.
      * Quoted strings, comments, reserved words, whitespace, and punctuation are all their own tokens.
      *
      * @param string $string   The SQL string
-     * @param array  $previous The result of the previous getNextToken() call
+     * @param array  $previous The result of the previous parseNextToken() call
      *
      * @return array An associative array containing the type and value of the token.
      */
-    protected function getNextToken($string, $previous = null)
+    protected function parseNextToken($string, $previous = null)
     {
         $matches = [];
+        $this->nextToken = [];
 
-        if (WhiteSpace::isWhiteSpaceString($string, $matches)) {
-            return WhiteSpace::getWhiteSpaceString($matches);
-        }
+        WhiteSpace::isWhiteSpace($this, $string, $matches);
+        Comment::isComment($this, $string);
+        Quoted::isQuoted($this, $string);
+        UserDefined::isUserDefinedVariable($this, $string);
+        Numeral::isNumeral($this, $string, $matches);
+        Boundary::isBoundary($this, $string, $matches);
+        Reserved::isReserved($this, $string, $matches, $previous);
+        String::isFunction($this, $string, $matches);
+        String::getNonReservedString($this, $string, $matches);
 
-        if (Comment::isCommentString($string)) {
-            return Comment::getCommentString($string);
-        }
-
-        if (Quoted::isQuotedString($string)) {
-            return Quoted::getQuotedString($string);
-        }
-
-        if (UserDefined::isUserDefinedVariableString($string)) {
-            return UserDefined::getUserDefinedVariableString($string);
-        }
-
-        if (Numeral::isNumeralString($string, $matches, $this->regexBoundaries)) {
-            return Numeral::getNumeralString($matches);
-        }
-
-        if (Boundary::isBoundaryCharacter($string, $matches, $this->regexBoundaries)) {
-            return Boundary::getBoundaryCharacter($matches);
-        }
-
-        $isReserved = Reserved::isReserved($matches, $previous, $string, $this);
-
-        if (0 !== count($isReserved)) {
-            return $isReserved;
-        }
-
-        if (String::isFunctionString($string, $matches, $this->regexFunction)) {
-            return String::getFunctionString($string, $matches);
-        }
-
-        return String::getNonReservedString($string, $this->regexBoundaries);
+        return $this->nextToken;
     }
 
     /**

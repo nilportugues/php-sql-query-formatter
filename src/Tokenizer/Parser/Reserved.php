@@ -19,19 +19,19 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Reserved
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param string $string
      * @param array $matches
      * @param array|null $previous
-     * @param string $string
-     * @param Tokenizer $tokenizer
      *
      * @return array
      */
-    public static function isReserved(array &$matches, $previous, $string, Tokenizer $tokenizer)
+    public static function isReserved(Tokenizer $tokenizer, $string, array &$matches, $previous)
     {
         $tokenData = [];
 
-        if (Reserved::isReservedPrecededByDotCharacter($previous)) {
-            Reserved::getReservedString(
+        if (!$tokenizer->getNextToken() && self::isReservedPrecededByDotCharacter($previous)) {
+            self::getReservedString(
                 $tokenData,
                 Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL,
                 $string,
@@ -40,7 +40,7 @@ final class Reserved
                 $tokenizer->getRegexBoundaries()
             );
 
-            Reserved::getReservedString(
+            self::getReservedString(
                 $tokenData,
                 Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE,
                 strtoupper($string),
@@ -49,7 +49,7 @@ final class Reserved
                 $tokenizer->getRegexBoundaries()
             );
 
-            Reserved::getReservedString(
+            self::getReservedString(
                 $tokenData,
                 Tokenizer::TOKEN_TYPE_RESERVED,
                 $string,
@@ -57,9 +57,9 @@ final class Reserved
                 $tokenizer->getRegexReserved(),
                 $tokenizer->getRegexBoundaries()
             );
-        }
 
-        return $tokenData;
+            $tokenizer->setNextToken($tokenData);
+        }
     }
 
     /**
@@ -69,7 +69,7 @@ final class Reserved
      *
      * @return bool
      */
-    public static function isReservedPrecededByDotCharacter($previous)
+    protected static function isReservedPrecededByDotCharacter($previous)
     {
         return !$previous || !isset($previous[Tokenizer::TOKEN_VALUE]) || $previous[Tokenizer::TOKEN_VALUE] !== '.';
     }
@@ -83,7 +83,7 @@ final class Reserved
      *
      * @return bool
      */
-    public static function isReservedString($upper, array &$matches, $regexReserved, $regexBoundaries)
+    protected static function isReservedString($upper, array &$matches, $regexReserved, $regexBoundaries)
     {
         return 1 == preg_match(
             '/^(' . $regexReserved . ')($|\s|' . $regexBoundaries . ')/',
@@ -117,9 +117,9 @@ final class Reserved
      *
      * @return array
      */
-    public static function getReservedString(array &$tokenData, $type, $string, array &$matches, $regex, $boundaries)
+    protected static function getReservedString(array &$tokenData, $type, $string, array &$matches, $regex, $boundaries)
     {
-        if (empty($tokenData) && Reserved::isReservedString($string, $matches, $regex, $boundaries)) {
+        if (empty($tokenData) && self::isReservedString($string, $matches, $regex, $boundaries)) {
             $tokenData = self::getStringTypeArray($type, $string, $matches);
         }
     }

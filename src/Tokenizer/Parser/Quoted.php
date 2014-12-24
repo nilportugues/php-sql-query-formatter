@@ -18,13 +18,23 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
  */
 final class Quoted
 {
+    /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     */
+    public static function isQuoted(Tokenizer $tokenizer, $string)
+    {
+        if (!$tokenizer->getNextToken() && self::isQuotedString($string)) {
+            $tokenizer->setNextToken(self::getQuotedString($string));
+        }
+    }
 
     /**
      * @param string $string
      *
      * @return bool
      */
-    public static function isQuotedString($string)
+    protected static function isQuotedString($string)
     {
         return $string[0] === '"' || $string[0] === '\'' || $string[0] === '`' || $string[0] === '[';
     }
@@ -34,7 +44,7 @@ final class Quoted
      *
      * @return array
      */
-    public static function getQuotedString($string)
+    protected static function getQuotedString($string)
     {
         $tokenType = Tokenizer::TOKEN_TYPE_QUOTE;
 

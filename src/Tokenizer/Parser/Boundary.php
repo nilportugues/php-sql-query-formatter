@@ -19,13 +19,27 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Boundary
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     * @param array     $matches
+     */
+    public static function isBoundary(Tokenizer $tokenizer, $string, array &$matches)
+    {
+        if (!$tokenizer->getNextToken() &&
+            self::isBoundaryCharacter($string, $matches, $tokenizer->getRegexBoundaries())
+        ) {
+            $tokenizer->setNextToken(self::getBoundaryCharacter($matches));
+        }
+    }
+
+    /**
      * @param       string $string
      * @param array        $matches
      * @param              string $regexBoundaries
      *
      * @return bool
      */
-    public static function isBoundaryCharacter($string, array &$matches, $regexBoundaries)
+    protected static function isBoundaryCharacter($string, array &$matches, $regexBoundaries)
     {
         return (1 == preg_match('/^(' . $regexBoundaries . ')/', $string, $matches));
     }
@@ -35,7 +49,7 @@ final class Boundary
      *
      * @return array
      */
-    public static function getBoundaryCharacter(array &$matches)
+    protected static function getBoundaryCharacter(array &$matches)
     {
         return [
             Tokenizer::TOKEN_VALUE => $matches[1],

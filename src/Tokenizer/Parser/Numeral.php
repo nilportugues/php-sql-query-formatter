@@ -19,13 +19,27 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Numeral
 {
     /**
+     * @param Tokenizer $tokenizer
+     * @param           $string
+     * @param array     $matches
+     *
+     * @return array
+     */
+    public static function isNumeral(Tokenizer $tokenizer, $string, array &$matches)
+    {
+        if (!$tokenizer->getNextToken() && self::isNumeralString($string, $matches, $tokenizer->getRegexBoundaries())) {
+            $tokenizer->setNextToken(self::getNumeralString($matches));
+        }
+    }
+
+    /**
      * @param       string $string
      * @param array        $matches
      * @param              string $regexBoundaries
      *
      * @return bool
      */
-    public static function isNumeralString($string, array &$matches, $regexBoundaries)
+    protected static function isNumeralString($string, array &$matches, $regexBoundaries)
     {
         return (1 == preg_match(
                 '/^([0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)($|\s|"\'`|' . $regexBoundaries . ')/',
@@ -39,7 +53,7 @@ final class Numeral
      *
      * @return array
      */
-    public static function getNumeralString(array &$matches)
+    protected static function getNumeralString(array &$matches)
     {
         return [Tokenizer::TOKEN_VALUE => $matches[1], Tokenizer::TOKEN_TYPE => Tokenizer::TOKEN_TYPE_NUMBER];
     }
