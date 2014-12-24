@@ -93,7 +93,7 @@ final class Reserved
     }
 
     /**
-     * @param              $type
+     * @param              string $type
      * @param       string $string
      * @param array        $matches
      *
@@ -109,11 +109,11 @@ final class Reserved
 
     /**
      * @param array $tokenData
-     * @param string $type
+     * @param string string
      * @param string $string
      * @param array $matches
-     * @param string $regex
-     * @param string $boundaries
+     * @param string string
+     * @param string string
      *
      * @return array
      */
