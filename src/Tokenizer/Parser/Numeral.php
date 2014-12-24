@@ -20,7 +20,7 @@ final class Numeral
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      * @param array     $matches
      *
      * @return array

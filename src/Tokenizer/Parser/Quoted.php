@@ -20,7 +20,7 @@ final class Quoted
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      */
     public static function isQuoted(Tokenizer $tokenizer, $string)
     {

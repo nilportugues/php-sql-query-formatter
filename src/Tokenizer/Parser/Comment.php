@@ -20,7 +20,7 @@ final class Comment
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           $string
+     * @param           string $string
      */
     public static function isComment(Tokenizer $tokenizer, $string)
     {
@@ -50,7 +50,7 @@ final class Comment
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
@@ -60,7 +60,7 @@ final class Comment
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return bool
      */
