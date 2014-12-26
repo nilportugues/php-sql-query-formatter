@@ -21,7 +21,7 @@ Add the following to your `composer.json` file :
 ```js
 {
     "require": {
-        "nilportugues/sql-query-formatter": "1.0.0"
+        "nilportugues/sql-query-formatter": "1.1.0"
     }
 }
 ```
