@@ -82,6 +82,31 @@ class Tokenizer
      */
     protected $nextToken = [];
 
+    /**
+     * @var int
+     */
+    protected $currentStringLength = 0;
+
+    /**
+     * @var int
+     */
+    protected $oldStringLength = 0;
+
+    /**
+     * @var string
+     */
+    protected $previousToken = '';
+
+    /**
+     * @var int
+     */
+    protected $tokenLength = 0;
+
+    /**
+     * @var array
+     */
+    protected $tokens = [];
+
 
     /**
      * Builds all the regular expressions needed to Tokenize the input.
@@ -119,30 +144,63 @@ class Tokenizer
      */
     public function tokenize($string)
     {
-        $tokens = [];
+        return (strlen($string) > 0) ? $this->processTokens($string) : [];
+    }
 
-        if (strlen($string) > 0) {
-            $token               = null;
-            $currentStringLength = strlen($string);
-            $oldStringLength     = strlen($string) + 1;
+    /**
+     * @param $string
+     *
+     * @return array
+     */
+    protected function processTokens($string)
+    {
+        $this->tokens              = [];
+        $this->previousToken       = '';
+        $this->currentStringLength = strlen($string);
+        $this->oldStringLength     = strlen($string) + 1;
 
-            while ($currentStringLength >= 0) {
-                if ($oldStringLength <= $currentStringLength) {
-                    break;
-                }
-
-                $token = $this->getToken($string, $currentStringLength, $token);
-                $tokens[]    = $token;
-                $tokenLength = strlen($token[self::TOKEN_VALUE]);
-
-                $oldStringLength = $currentStringLength;
-                $currentStringLength -= $tokenLength;
-
-                $string = substr($string, $tokenLength);
+        while ($this->currentStringLength >= 0) {
+            if ($this->oldStringLength <= $this->currentStringLength) {
+                break;
             }
+            $string = $this->processOneToken($string);
+        }
+        return $this->tokens;
+    }
+
+    /**
+     * @param $string
+     *
+     * @return string
+     */
+    protected function processOneToken($string)
+    {
+        $token               = $this->getToken($string, $this->currentStringLength, $this->previousToken);
+        $this->tokens[]      = $token;
+        $this->tokenLength   = strlen($token[self::TOKEN_VALUE]);
+        $this->previousToken = $token;
+
+        $this->oldStringLength = $this->currentStringLength;
+        $this->currentStringLength -= $this->tokenLength;
+
+        return substr($string, $this->tokenLength);
+    }
+
+    /**
+     * @param $string
+     * @param $currentStringLength
+     * @param $previousToken
+     *
+     * @return array|mixed
+     */
+    protected function getToken($string, $currentStringLength, $previousToken)
+    {
+        $cacheKey = $this->useTokenCache($string, $currentStringLength);
+        if (!empty($cacheKey) && isset($this->tokenCache[$cacheKey])) {
+            return $this->getNextTokenFromCache($cacheKey);
         }
 
-        return $tokens;
+        return $this->getNextTokenFromString($string, $previousToken, $cacheKey);
     }
 
     /**
@@ -288,23 +346,5 @@ class Tokenizer
     protected function quoteRegex($string)
     {
         return preg_quote($string, '/');
-    }
-
-    /**
-     * @param $string
-     * @param $currentStringLength
-     * @param $token
-     *
-     * @return array|mixed
-     */
-    protected function getToken($string, $currentStringLength, $token)
-    {
-        $cacheKey = $this->useTokenCache($string, $currentStringLength);
-        if (!empty($cacheKey) && isset($this->tokenCache[$cacheKey])) {
-            $token = $this->getNextTokenFromCache($cacheKey);
-        } else {
-            $token = $this->getNextTokenFromString($string, $token, $cacheKey);
-        }
-        return $token;
     }
 }
