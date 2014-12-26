@@ -19,44 +19,31 @@ use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
 final class Reserved
 {
     /**
-     * @param Tokenizer $tokenizer
-     * @param string $string
-     * @param array $matches
+     * @var array
+     */
+    protected static $regex = [
+        Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL => 'getRegexReservedTopLevel',
+        Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE   => 'getRegexReservedNewLine',
+        Tokenizer::TOKEN_TYPE_RESERVED           => 'getRegexReserved'
+    ];
+
+    /**
+     * @param Tokenizer  $tokenizer
+     * @param string     $string
      * @param array|null $previous
      *
      * @return array
      */
-    public static function isReserved(Tokenizer $tokenizer, $string, array &$matches, $previous)
+    public static function isReserved(Tokenizer $tokenizer, $string, $previous)
     {
         $tokenData = [];
 
         if (!$tokenizer->getNextToken() && self::isReservedPrecededByDotCharacter($previous)) {
-            self::getReservedString(
-                $tokenData,
-                Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL,
-                $string,
-                $matches,
-                $tokenizer->getRegexReservedTopLevel(),
-                $tokenizer->getRegexBoundaries()
-            );
+            $upperCase = strtoupper($string);
 
-            self::getReservedString(
-                $tokenData,
-                Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE,
-                strtoupper($string),
-                $matches,
-                $tokenizer->getRegexReservedNewLine(),
-                $tokenizer->getRegexBoundaries()
-            );
-
-            self::getReservedString(
-                $tokenData,
-                Tokenizer::TOKEN_TYPE_RESERVED,
-                $string,
-                $matches,
-                $tokenizer->getRegexReserved(),
-                $tokenizer->getRegexBoundaries()
-            );
+            self::getReservedString($tokenData, Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL, $string, $tokenizer);
+            self::getReservedString($tokenData, Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE, $upperCase, $tokenizer);
+            self::getReservedString($tokenData, Tokenizer::TOKEN_TYPE_RESERVED, $string, $tokenizer);
 
             $tokenizer->setNextToken($tokenData);
         }
@@ -74,6 +61,27 @@ final class Reserved
         return !$previous || !isset($previous[Tokenizer::TOKEN_VALUE]) || $previous[Tokenizer::TOKEN_VALUE] !== '.';
     }
 
+    /**
+     * @param array     $tokenData
+     * @param           $type
+     * @param           $string
+     * @param Tokenizer $tokenizer
+     */
+    protected static function getReservedString(array &$tokenData, $type, $string, Tokenizer $tokenizer)
+    {
+        $matches = [];
+        $method  = self::$regex[$type];
+
+        if (empty($tokenData) && self::isReservedString(
+                $string,
+                $matches,
+                $tokenizer->$method(),
+                $tokenizer->getRegexBoundaries()
+            )
+        ) {
+            $tokenData = self::getStringTypeArray($type, $string, $matches);
+        }
+    }
 
     /**
      * @param       string        $upper
@@ -94,8 +102,8 @@ final class Reserved
 
     /**
      * @param              string $type
-     * @param       string $string
-     * @param array        $matches
+     * @param       string        $string
+     * @param array               $matches
      *
      * @return array
      */
@@ -105,22 +113,5 @@ final class Reserved
             Tokenizer::TOKEN_TYPE  => $type,
             Tokenizer::TOKEN_VALUE => substr($string, 0, strlen($matches[1]))
         ];
-    }
-
-    /**
-     * @param array $tokenData
-     * @param string string
-     * @param string $string
-     * @param array $matches
-     * @param string string
-     * @param string string
-     *
-     * @return array
-     */
-    protected static function getReservedString(array &$tokenData, $type, $string, array &$matches, $regex, $boundaries)
-    {
-        if (empty($tokenData) && self::isReservedString($string, $matches, $regex, $boundaries)) {
-            $tokenData = self::getStringTypeArray($type, $string, $matches);
-        }
     }
 }

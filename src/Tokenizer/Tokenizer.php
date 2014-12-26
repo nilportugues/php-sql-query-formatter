@@ -270,7 +270,7 @@ class Tokenizer
         UserDefined::isUserDefinedVariable($this, $string);
         Numeral::isNumeral($this, $string, $matches);
         Boundary::isBoundary($this, $string, $matches);
-        Reserved::isReserved($this, $string, $matches, $previous);
+        Reserved::isReserved($this, $string, $previous);
         String::isFunction($this, $string, $matches);
         String::getNonReservedString($this, $string, $matches);
 
