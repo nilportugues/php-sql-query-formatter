@@ -84,11 +84,7 @@ class Formatter
 
         foreach ($tokens as $i => $token) {
             $queryValue = $token[Tokenizer::TOKEN_VALUE];
-
-            $this->indentation
-                ->increaseSpecialIndent()
-                ->increaseBlockIndent();
-
+            $this->indentation->increaseSpecialIndent()->increaseBlockIndent();
             $addedNewline = $this->newLine->addNewLineBreak($tab);
 
             if ($this->comment->stringHasCommentToken($token)) {
@@ -105,82 +101,40 @@ class Formatter
                 $this->inlineCount += strlen($token[Tokenizer::TOKEN_VALUE]);
             }
 
-            if ($this->parentheses->stringIsOpeningParentheses($token)) {
-                $length = 0;
-                for ($j = 1; $j <= 250; $j++) {
-                    if (isset($tokens[$i + $j])) {
-                        $next = $tokens[$i + $j];
-                        if ($this->parentheses->stringIsClosingParentheses($next)) {
-                            $this->parentheses->writeNewInlineParentheses();
-                            break;
-                        }
+            switch ($token) {
+                case $this->parentheses->stringIsOpeningParentheses($token):
+                    $tokens = $this->formatOpeningParenthesis($token, $i, $tokens, $originalTokens);
+                    break;
 
-                        if ($this->parentheses->invalidParenthesesTokenValue($next)
-                            || $this->parentheses->invalidParenthesesTokenType($next)
-                        ) {
-                            break;
-                        }
+                case $this->parentheses->stringIsClosingParentheses($token):
+                    $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
+                    $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
+                    break;
 
-                        $length += strlen($next[Tokenizer::TOKEN_VALUE]);
+                case $this->stringIsEndOfLimitClause($token):
+                    $this->clauseLimit = false;
+                    break;
+
+                case $token[Tokenizer::TOKEN_VALUE] === ',' && false === $this->parentheses->getInlineParentheses():
+                    $this->newLine->writeNewLineBecauseOfComma();
+                    break;
+
+                case Token::isTokenTypeReservedTopLevel($token):
+                    $queryValue = $this->formatTokenTypeReservedTopLevel($addedNewline, $tab, $token, $queryValue);
+                    break;
+
+                case $this->newLine->isTokenTypeReservedNewLine($token):
+                    $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
+
+                    if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
+                        $queryValue = preg_replace('/\s+/', ' ', $queryValue);
                     }
-                }
-                $this->newLine->writeNewLineForLongInlineValues($length);
-
-                if (WhiteSpace::isPrecedingCurrentTokenOfTokenTypeWhiteSpace($originalTokens, $token)) {
-                    $this->formattedSql = rtrim($this->formattedSql, ' ');
-                }
-
-                $this->newLine->addNewLineAfterOpeningParentheses();
-            } elseif ($this->parentheses->stringIsClosingParentheses($token)) {
-                $this->indentation->decreaseIndentLevelUntilIndentTypeIsSpecial($this);
-                $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
-            } elseif (Token::isTokenTypeReservedTopLevel($token)) {
-                $this->indentation
-                    ->setIncreaseSpecialIndent(true)
-                    ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
-
-                $this->newLine->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
-
-                if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
-                    $queryValue = preg_replace('/\s+/', ' ', $queryValue);
-                }
-                Token::tokenHasLimitClause($token, $this->parentheses, $this);
-            } elseif ($this->stringIsEndOfLimitClause($token)) {
-                $this->clauseLimit = false;
-            } elseif (
-                $token[Tokenizer::TOKEN_VALUE] === ','
-                && false === $this->parentheses->getInlineParentheses()
-            ) {
-                $this->newLine->writeNewLineBecauseOfComma();
-            } elseif ($this->newLine->isTokenTypeReservedNewLine($token)) {
-                $this->newLine->addNewLineBeforeToken($addedNewline, $tab);
-
-                if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
-                    $queryValue = preg_replace('/\s+/', ' ', $queryValue);
-                }
+                    break;
             }
 
-            if (Token::tokenHasMultipleBoundaryCharactersTogether($token, $tokens, $i, $originalTokens)) {
-                $this->formattedSql = rtrim($this->formattedSql, ' ');
-            }
-
-            if (WhiteSpace::tokenHasExtraWhiteSpaceLeft($token)) {
-                $this->formattedSql = rtrim($this->formattedSql, ' ');
-            }
-
-            $this->formattedSql .= $queryValue . ' ';
-
-            if (WhiteSpace::tokenHasExtraWhiteSpaceRight($token)) {
-                $this->formattedSql = rtrim($this->formattedSql, ' ');
-            }
-
-            if (Token::tokenIsMinusSign($token, $tokens, $i)) {
-                $previousTokenType = $tokens[$i - 1][Tokenizer::TOKEN_TYPE];
-
-                if (WhiteSpace::tokenIsNumberAndHasExtraWhiteSpaceRight($previousTokenType)) {
-                    $this->formattedSql = rtrim($this->formattedSql, ' ');
-                }
-            }
+            $this->formatBoundaryCharacterToken($token, $i, $tokens, $originalTokens);
+            $this->formatWhiteSpaceToken($token, $queryValue);
+            $this->formatDashToken($token, $i, $tokens);
         }
 
         return trim(str_replace(["\t", " \n"], [$this->tab, "\n"], $this->formattedSql)) . "\n";
@@ -200,6 +154,44 @@ class Formatter
         $this->formattedSql = '';
     }
 
+    /**
+     * @param       $token
+     * @param       $i
+     * @param array $tokens
+     * @param array $originalTokens
+     *
+     * @return array
+     */
+    protected function formatOpeningParenthesis($token, $i, array &$tokens, array &$originalTokens)
+    {
+        $length = 0;
+        for ($j = 1; $j <= 250; $j++) {
+            if (isset($tokens[$i + $j])) {
+                $next = $tokens[$i + $j];
+                if ($this->parentheses->stringIsClosingParentheses($next)) {
+                    $this->parentheses->writeNewInlineParentheses();
+                    break;
+                }
+
+                if ($this->parentheses->invalidParenthesesTokenValue($next)
+                    || $this->parentheses->invalidParenthesesTokenType($next)
+                ) {
+                    break;
+                }
+
+                $length += strlen($next[Tokenizer::TOKEN_VALUE]);
+            }
+        }
+        $this->newLine->writeNewLineForLongInlineValues($length);
+
+        if (WhiteSpace::isPrecedingCurrentTokenOfTokenTypeWhiteSpace($originalTokens, $token)) {
+            $this->formattedSql = rtrim($this->formattedSql, ' ');
+        }
+
+        $this->newLine->addNewLineAfterOpeningParentheses();
+
+        return $tokens;
+    }
 
     /**
      * @param $token
@@ -212,6 +204,75 @@ class Formatter
         && $token[Tokenizer::TOKEN_VALUE] !== ","
         && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_NUMBER
         && $token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE;
+    }
+
+    /**
+     * @param $addedNewline
+     * @param $tab
+     * @param $token
+     * @param $queryValue
+     *
+     * @return mixed
+     */
+    protected function formatTokenTypeReservedTopLevel($addedNewline, $tab, $token, $queryValue)
+    {
+        $this->indentation
+            ->setIncreaseSpecialIndent(true)
+            ->decreaseSpecialIndentIfCurrentIndentTypeIsSpecial();
+
+        $this->newLine->writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab);
+
+        if (WhiteSpace::tokenHasExtraWhiteSpaces($token)) {
+            $queryValue = preg_replace('/\s+/', ' ', $queryValue);
+        }
+        Token::tokenHasLimitClause($token, $this->parentheses, $this);
+        return $queryValue;
+    }
+
+    /**
+     * @param       $token
+     * @param       $i
+     * @param array $tokens
+     * @param array $originalTokens
+     */
+    protected function formatBoundaryCharacterToken($token, $i, array &$tokens, array &$originalTokens)
+    {
+        if (Token::tokenHasMultipleBoundaryCharactersTogether($token, $tokens, $i, $originalTokens)) {
+            $this->formattedSql = rtrim($this->formattedSql, ' ');
+        }
+    }
+
+    /**
+     * @param $token
+     * @param $queryValue
+     */
+    protected function formatWhiteSpaceToken($token, $queryValue)
+    {
+        if (WhiteSpace::tokenHasExtraWhiteSpaceLeft($token)) {
+            $this->formattedSql = rtrim($this->formattedSql, ' ');
+        }
+
+        $this->formattedSql .= $queryValue . ' ';
+
+        if (WhiteSpace::tokenHasExtraWhiteSpaceRight($token)) {
+            $this->formattedSql = rtrim($this->formattedSql, ' ');
+        }
+    }
+
+    /**
+     * @param       $token
+     * @param       $i
+     * @param array $tokens
+     */
+    protected function formatDashToken($token, $i, array &$tokens)
+    {
+        if (Token::tokenIsMinusSign($token, $tokens, $i)) {
+            $previousTokenType = $tokens[$i - 1][Tokenizer::TOKEN_TYPE];
+
+            if (WhiteSpace::tokenIsNumberAndHasExtraWhiteSpaceRight($previousTokenType)) {
+                $this->formattedSql = rtrim($this->formattedSql, ' ');
+            }
+        }
     }
 
     /**
