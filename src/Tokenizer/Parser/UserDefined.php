@@ -55,17 +55,35 @@ final class UserDefined
             Tokenizer::TOKEN_TYPE  => Tokenizer::TOKEN_TYPE_VARIABLE
         ];
 
-        if ($string[1] === '"' || $string[1] === '\'' || $string[1] === '`') {
-            $returnData[Tokenizer::TOKEN_VALUE] = '@' . Quoted::wrapStringWithQuotes(substr($string, 1));
-            return $returnData;
-        }
-
-        $matches = [];
-        preg_match('/^(@[a-zA-Z0-9\._\$]+)/', $string, $matches);
-        if ($matches) {
-            $returnData[Tokenizer::TOKEN_VALUE] = $matches[1];
-        }
+        self::setTokenValueStartingWithAtSymbolAndWrapped($returnData, $string);
+        self::setTokenValueStartingWithAtSymbol($returnData, $string);
 
         return $returnData;
+    }
+
+    /**
+     * @param array $returnData
+     * @param string $string
+     */
+    protected static function setTokenValueStartingWithAtSymbolAndWrapped(array &$returnData, $string)
+    {
+        if ($string[1] === '"' || $string[1] === '\'' || $string[1] === '`') {
+            $returnData[Tokenizer::TOKEN_VALUE] = '@' . Quoted::wrapStringWithQuotes(substr($string, 1));
+        }
+    }
+
+    /**
+     * @param array $returnData
+     * @param string $string
+     */
+    protected static function setTokenValueStartingWithAtSymbol(array &$returnData, $string)
+    {
+        if (null === $returnData[Tokenizer::TOKEN_VALUE]) {
+            $matches = [];
+            preg_match('/^(@[a-zA-Z0-9\._\$]+)/', $string, $matches);
+            if ($matches) {
+                $returnData[Tokenizer::TOKEN_VALUE] = $matches[1];
+            }
+        }
     }
 }

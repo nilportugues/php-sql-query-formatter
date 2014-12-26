@@ -77,7 +77,6 @@ class Tokenizer
      */
     protected $tokenCache = [];
 
-
     /**
      * @var array
      */
@@ -115,6 +114,7 @@ class Tokenizer
      * Each token is an associative array with type and value.
      *
      * @param string $string
+     *
      * @return array
      */
     public function tokenize($string)
@@ -131,17 +131,11 @@ class Tokenizer
                     break;
                 }
 
-                $oldStringLength = $currentStringLength;
-
-                $cacheKey = $this->useTokenCache($string, $currentStringLength);
-                if (!empty($cacheKey) && isset($this->tokenCache[$cacheKey])) {
-                    $token = $this->getNextTokenFromCache($cacheKey);
-                } else {
-                    $token = $this->getNextTokenFromString($string, $token, $cacheKey);
-                }
-
+                $token = $this->getToken($string, $currentStringLength, $token);
                 $tokens[]    = $token;
                 $tokenLength = strlen($token[self::TOKEN_VALUE]);
+
+                $oldStringLength = $currentStringLength;
                 $currentStringLength -= $tokenLength;
 
                 $string = substr($string, $tokenLength);
@@ -199,25 +193,6 @@ class Tokenizer
     }
 
     /**
-     * @param array $nextToken
-     *
-     * @return $this
-     */
-    public function setNextToken($nextToken)
-    {
-        $this->nextToken = $nextToken;
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getNextToken()
-    {
-        return $this->nextToken;
-    }
-
-    /**
      * Return the next token and token type in a SQL string.
      * Quoted strings, comments, reserved words, whitespace, and punctuation are all their own tokens.
      *
@@ -228,7 +203,7 @@ class Tokenizer
      */
     protected function parseNextToken($string, $previous = null)
     {
-        $matches = [];
+        $matches         = [];
         $this->nextToken = [];
 
         WhiteSpace::isWhiteSpace($this, $string, $matches);
@@ -245,15 +220,22 @@ class Tokenizer
     }
 
     /**
-     * Helper function for building regular expressions for reserved words and boundary characters
-     *
-     * @param string $string
-     *
-     * @return string
+     * @return array
      */
-    protected function quoteRegex($string)
+    public function getNextToken()
     {
-        return preg_quote($string, '/');
+        return $this->nextToken;
+    }
+
+    /**
+     * @param array $nextToken
+     *
+     * @return $this
+     */
+    public function setNextToken($nextToken)
+    {
+        $this->nextToken = $nextToken;
+        return $this;
     }
 
     /**
@@ -294,5 +276,35 @@ class Tokenizer
     public function getRegexReservedTopLevel()
     {
         return $this->regexReservedTopLevel;
+    }
+
+    /**
+     * Helper function for building regular expressions for reserved words and boundary characters
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    protected function quoteRegex($string)
+    {
+        return preg_quote($string, '/');
+    }
+
+    /**
+     * @param $string
+     * @param $currentStringLength
+     * @param $token
+     *
+     * @return array|mixed
+     */
+    protected function getToken($string, $currentStringLength, $token)
+    {
+        $cacheKey = $this->useTokenCache($string, $currentStringLength);
+        if (!empty($cacheKey) && isset($this->tokenCache[$cacheKey])) {
+            $token = $this->getNextTokenFromCache($cacheKey);
+        } else {
+            $token = $this->getNextTokenFromString($string, $token, $cacheKey);
+        }
+        return $token;
     }
 }
