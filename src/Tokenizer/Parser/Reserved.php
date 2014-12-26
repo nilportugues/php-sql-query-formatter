@@ -64,7 +64,7 @@ final class Reserved
     /**
      * @param array     $tokenData
      * @param           $type
-     * @param           $string
+     * @param           string $string
      * @param Tokenizer $tokenizer
      */
     protected static function getReservedString(array &$tokenData, $type, $string, Tokenizer $tokenizer)
