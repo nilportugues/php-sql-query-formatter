@@ -101,7 +101,7 @@ final class Reserved
     }
 
     /**
-     * @param              string $type
+     * @param              string string
      * @param       string        $string
      * @param array               $matches
      *
