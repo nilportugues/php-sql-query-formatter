@@ -207,8 +207,8 @@ class Formatter
     }
 
     /**
-     * @param $addedNewline
-     * @param $tab
+     * @param boolean $addedNewline
+     * @param string $tab
      * @param $token
      * @param $queryValue
      *
