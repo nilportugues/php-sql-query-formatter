@@ -169,7 +169,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
@@ -234,7 +234,7 @@ class Tokenizer
      * Get the next token and the token type and store it in cache.
      *
      * @param string $string
-     * @param        $token
+     * @param        string $token
      * @param string $cacheKey
      *
      * @return array
