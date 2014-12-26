@@ -148,7 +148,7 @@ class Tokenizer
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return array
      */
@@ -188,8 +188,8 @@ class Tokenizer
 
     /**
      * @param $string
-     * @param $currentStringLength
-     * @param $previousToken
+     * @param integer $currentStringLength
+     * @param string $previousToken
      *
      * @return array|mixed
      */
