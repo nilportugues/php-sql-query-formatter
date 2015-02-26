@@ -31,8 +31,6 @@
     "require-dev":
     {
         "phpunit/phpunit": "4.2.*@dev",
-        "phpunit/phpunit-mock-objects": "2.2.*@dev",
-        "phpunit/php-code-coverage": "2.0.x-dev",
         "sebastian/comparator": "dev-master",
         "sebastian/finder-facade": "dev-master",
         "theseer/fdomdocument": "dev-master",
