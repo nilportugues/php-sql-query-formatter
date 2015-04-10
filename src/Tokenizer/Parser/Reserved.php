@@ -84,10 +84,10 @@ final class Reserved
     }
 
     /**
-     * @param       string        $upper
-     * @param array               $matches
-     * @param              string $regexReserved
-     * @param              string $regexBoundaries
+     * @param string $upper
+     * @param array $matches
+     * @param string $regexReserved
+     * @param string $regexBoundaries
      *
      * @return bool
      */
@@ -101,9 +101,9 @@ final class Reserved
     }
 
     /**
-     * @param              string $type
-     * @param       string        $string
-     * @param array               $matches
+     * @param string $type
+     * @param string $string
+     * @param array $matches
      *
      * @return array
      */

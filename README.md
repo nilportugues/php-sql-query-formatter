@@ -16,16 +16,11 @@ A very lightweight PHP class that re-formats unreadable or computer-generated SQ
 
 <a name="block1"></a>
 ## 1.Installation
-Add the following to your `composer.json` file :
+The recommended way to install the SQL Query Formatter is through [Composer](http://getcomposer.org). Run the following command to install it:
 
-```js
-{
-    "require": {
-        "nilportugues/sql-query-formatter": "1.0.0"
-    }
-}
+```sh
+php composer.phar require nilportugues/sql-query-formatter
 ```
-
 
 <a name="block2"></a>
 ## 2. Features
