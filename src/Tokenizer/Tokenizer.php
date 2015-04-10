@@ -8,21 +8,21 @@
  * file that was distributed with this source code.
  */
 
-namespace NilPortugues\SqlQueryFormatter\Tokenizer;
+namespace NilPortugues\Sql\QueryFormatter\Tokenizer;
 
-use NilPortugues\SqlQueryFormatter\Helper\Token;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\Boundary;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\Comment;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\Numeral;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\Quoted;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\Reserved;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\String;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\UserDefined;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Parser\WhiteSpace;
+use NilPortugues\Sql\QueryFormatter\Helper\Token;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Boundary;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Comment;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Numeral;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Quoted;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Reserved;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\String as LiteralString;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\UserDefined;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\WhiteSpace;
 
 /**
  * Class Tokenizer
- * @package NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Sql\QueryFormatter\Helper
  */
 class Tokenizer
 {
@@ -271,8 +271,8 @@ class Tokenizer
         Numeral::isNumeral($this, $string, $matches);
         Boundary::isBoundary($this, $string, $matches);
         Reserved::isReserved($this, $string, $previous);
-        String::isFunction($this, $string, $matches);
-        String::getNonReservedString($this, $string, $matches);
+        LiteralString::isFunction($this, $string, $matches);
+        LiteralString::getNonReservedString($this, $string, $matches);
 
         return $this->nextToken;
     }

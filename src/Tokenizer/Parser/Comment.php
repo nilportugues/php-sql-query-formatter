@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace NilPortugues\SqlQueryFormatter\Tokenizer\Parser;
+namespace NilPortugues\Sql\QueryFormatter\Tokenizer\Parser;
 
-use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class Comment
- * @package NilPortugues\SqlQueryFormatter\Tokenizer\Parser
+ * @package NilPortugues\Sql\QueryFormatter\Tokenizer\Parser
  */
 final class Comment
 {

@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\NilPortugues\SqlQueryFormatter\Tokenizer;
+namespace NilPortugues\Tests\Sql\QueryFormatter\Tokenizer;
 
-use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class TokenizerTest
- * @package Tests\NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Tests\Sql\QueryFormatter\Helper
  */
 class TokenizerTest extends \PHPUnit_Framework_TestCase
 {

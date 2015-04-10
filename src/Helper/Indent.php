@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace NilPortugues\SqlQueryFormatter\Helper;
+namespace NilPortugues\Sql\QueryFormatter\Helper;
 
-use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\Sql\QueryFormatter\Formatter;
 
 /**
  * Class Indent
- * @package NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Sql\QueryFormatter\Helper
  */
 class Indent
 {

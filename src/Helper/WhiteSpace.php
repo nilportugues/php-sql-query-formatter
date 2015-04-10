@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace NilPortugues\SqlQueryFormatter\Helper;
+namespace NilPortugues\Sql\QueryFormatter\Helper;
 
-use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class WhiteSpace
- * @package NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Sql\QueryFormatter\Helper
  */
 class WhiteSpace
 {

@@ -8,13 +8,13 @@
  * file that was distributed with this source code.
  */
 
-namespace Tests\NilPortugues\SqlQueryFormatter;
+namespace NilPortugues\Tests\Sql\QueryFormatter;
 
-use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\Sql\QueryFormatter\Formatter;
 
 /**
  * Class FormatterTest
- * @package Tests\NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Tests\Sql\QueryFormatter\Helper
  */
 class FormatterTest extends \PHPUnit_Framework_TestCase
 {

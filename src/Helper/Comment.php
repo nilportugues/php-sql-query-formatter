@@ -8,19 +8,19 @@
  * file that was distributed with this source code.
  */
 
-namespace NilPortugues\SqlQueryFormatter\Helper;
+namespace NilPortugues\Sql\QueryFormatter\Helper;
 
-use NilPortugues\SqlQueryFormatter\Formatter;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+use NilPortugues\Sql\QueryFormatter\Formatter;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Class Comment
- * @package NilPortugues\SqlQueryFormatter\Helper
+ * @package NilPortugues\Sql\QueryFormatter\Helper
  */
 class Comment
 {
     /**
-     * @var \NilPortugues\SqlQueryFormatter\Formatter
+     * @var \NilPortugues\Sql\QueryFormatter\Formatter
      */
     protected $formatter;
 

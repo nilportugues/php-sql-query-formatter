@@ -7,21 +7,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace NilPortugues\SqlQueryFormatter;
+namespace NilPortugues\Sql\QueryFormatter;
 
-use NilPortugues\SqlQueryFormatter\Helper\Comment;
-use NilPortugues\SqlQueryFormatter\Helper\Indent;
-use NilPortugues\SqlQueryFormatter\Helper\NewLine;
-use NilPortugues\SqlQueryFormatter\Helper\Parentheses;
-use NilPortugues\SqlQueryFormatter\Helper\Token;
-use NilPortugues\SqlQueryFormatter\Helper\WhiteSpace;
-use NilPortugues\SqlQueryFormatter\Tokenizer\Tokenizer;
+use NilPortugues\Sql\QueryFormatter\Helper\Comment;
+use NilPortugues\Sql\QueryFormatter\Helper\Indent;
+use NilPortugues\Sql\QueryFormatter\Helper\NewLine;
+use NilPortugues\Sql\QueryFormatter\Helper\Parentheses;
+use NilPortugues\Sql\QueryFormatter\Helper\Token;
+use NilPortugues\Sql\QueryFormatter\Helper\WhiteSpace;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
  * Lightweight Formatter heavily based on https://github.com/jdorn/sql-formatter.
  *
  * Class Formatter
- * @package NilPortugues\SqlQueryFormatter
+ * @package NilPortugues\Sql\QueryFormatter
  */
 class Formatter
 {
