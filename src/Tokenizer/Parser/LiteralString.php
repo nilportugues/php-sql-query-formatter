@@ -13,10 +13,10 @@ namespace NilPortugues\Sql\QueryFormatter\Tokenizer\Parser;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class String
+ * Class LiteralString
  * @package NilPortugues\Sql\QueryFormatter\Tokenizer\Parser
  */
-final class String
+final class LiteralString
 {
     /**
      * @param Tokenizer $tokenizer

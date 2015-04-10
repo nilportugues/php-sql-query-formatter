@@ -16,7 +16,7 @@ use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Comment;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Numeral;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Quoted;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\Reserved;
-use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\String as LiteralString;
+use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\LiteralString;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\UserDefined;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Parser\WhiteSpace;
 
