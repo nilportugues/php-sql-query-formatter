@@ -41,7 +41,7 @@ php composer.phar require nilportugues/sql-query-formatter
 Sample code:
 ```php
 <?php
-use NilPortugues\SqlQueryFormatter\Formatter;
+use NilPortugues\Sql\QueryFormatter\Formatter;
 
 $query = <<<SQL
 SELECT user.user_id, user.username, (SELECT 
@@ -121,7 +121,7 @@ I would like to thank the following people:
 SQL Query Formatter is licensed under the MIT license.
 
 ```
-Copyright (c) 2014 Nil Portugués Calderó
+Copyright (c) 2015 Nil Portugués Calderó
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
