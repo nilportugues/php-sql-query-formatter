@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 1:19 PM
+ * Time: 1:19 PM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,7 @@ namespace NilPortugues\Sql\QueryFormatter\Helper;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class WhiteSpace
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class WhiteSpace.
  */
 class WhiteSpace
 {
@@ -43,7 +42,6 @@ class WhiteSpace
             || $token[Tokenizer::TOKEN_VALUE] === '.';
     }
 
-
     /**
      * @param $tokenType
      *
@@ -58,7 +56,6 @@ class WhiteSpace
             && $tokenType !== Tokenizer::TOKEN_TYPE_NUMBER;
     }
 
-
     /**
      * @param $token
      *
@@ -66,9 +63,9 @@ class WhiteSpace
      */
     public static function tokenHasExtraWhiteSpaces($token)
     {
-        return strpos($token[Tokenizer::TOKEN_VALUE], ' ') !== false
-        || strpos($token[Tokenizer::TOKEN_VALUE], "\n") !== false
-        || strpos($token[Tokenizer::TOKEN_VALUE], "\t") !== false;
+        return \strpos($token[Tokenizer::TOKEN_VALUE], ' ') !== false
+        || \strpos($token[Tokenizer::TOKEN_VALUE], "\n") !== false
+        || \strpos($token[Tokenizer::TOKEN_VALUE], "\t") !== false;
     }
 
     /**
@@ -94,7 +91,7 @@ class WhiteSpace
         foreach ($originalTokens as $i => &$token) {
             if ($token[Tokenizer::TOKEN_TYPE] !== Tokenizer::TOKEN_TYPE_WHITESPACE) {
                 $token['i'] = $i;
-                $tokens[]   = $token;
+                $tokens[] = $token;
             }
         }
 

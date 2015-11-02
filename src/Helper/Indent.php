@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 11:37 AM
+ * Time: 11:37 AM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,7 @@ namespace NilPortugues\Sql\QueryFormatter\Helper;
 use NilPortugues\Sql\QueryFormatter\Formatter;
 
 /**
- * Class Indent
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class Indent.
  */
 class Indent
 {
@@ -43,7 +42,6 @@ class Indent
      */
     protected $indentTypes = [];
 
-
     /**
      * Increase the Special Indent if increaseSpecialIndent is true after the current iteration.
      *
@@ -52,10 +50,11 @@ class Indent
     public function increaseSpecialIndent()
     {
         if ($this->increaseSpecialIndent) {
-            $this->indentLvl++;
+            ++$this->indentLvl;
             $this->increaseSpecialIndent = false;
-            array_unshift($this->indentTypes, 'special');
+            \array_unshift($this->indentTypes, 'special');
         }
+
         return $this;
     }
 
@@ -67,10 +66,11 @@ class Indent
     public function increaseBlockIndent()
     {
         if ($this->increaseBlockIndent) {
-            $this->indentLvl++;
+            ++$this->indentLvl;
             $this->increaseBlockIndent = false;
-            array_unshift($this->indentTypes, 'block');
+            \array_unshift($this->indentTypes, 'block');
         }
+
         return $this;
     }
 
@@ -83,15 +83,16 @@ class Indent
      */
     public function decreaseIndentLevelUntilIndentTypeIsSpecial(Formatter $formatter)
     {
-        $formatter->setFormattedSql(rtrim($formatter->getFormattedSql(), ' '));
-        $this->indentLvl--;
+        $formatter->setFormattedSql(\rtrim($formatter->getFormattedSql(), ' '));
+        --$this->indentLvl;
 
-        while ($j = array_shift($this->indentTypes)) {
+        while ($j = \array_shift($this->indentTypes)) {
             if ('special' !== $j) {
                 break;
             }
-            $this->indentLvl--;
+            --$this->indentLvl;
         }
+
         return $this;
     }
 
@@ -100,17 +101,18 @@ class Indent
      */
     public function decreaseSpecialIndentIfCurrentIndentTypeIsSpecial()
     {
-        reset($this->indentTypes);
+        \reset($this->indentTypes);
 
-        if (current($this->indentTypes) === 'special') {
-            $this->indentLvl--;
-            array_shift($this->indentTypes);
+        if (\current($this->indentTypes) === 'special') {
+            --$this->indentLvl;
+            \array_shift($this->indentTypes);
         }
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIncreaseBlockIndent()
     {
@@ -118,7 +120,7 @@ class Indent
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getIncreaseSpecialIndent()
     {
@@ -142,24 +144,26 @@ class Indent
     }
 
     /**
-     * @param boolean $increaseBlockIndent
+     * @param bool $increaseBlockIndent
      *
      * @return $this
      */
     public function setIncreaseBlockIndent($increaseBlockIndent)
     {
         $this->increaseBlockIndent = $increaseBlockIndent;
+
         return $this;
     }
 
     /**
-     * @param boolean $increaseSpecialIndent
+     * @param bool $increaseSpecialIndent
      *
      * @return $this
      */
     public function setIncreaseSpecialIndent($increaseSpecialIndent)
     {
         $this->increaseSpecialIndent = $increaseSpecialIndent;
+
         return $this;
     }
 
@@ -171,6 +175,7 @@ class Indent
     public function setIndentLvl($indentLvl)
     {
         $this->indentLvl = $indentLvl;
+
         return $this;
     }
 
@@ -182,22 +187,24 @@ class Indent
     public function setIndentTypes($indentTypes)
     {
         $this->indentTypes = $indentTypes;
+
         return $this;
     }
 
     /**
-     * @param boolean $inlineIndented
+     * @param bool $inlineIndented
      *
      * @return $this
      */
     public function setInlineIndented($inlineIndented)
     {
         $this->inlineIndented = $inlineIndented;
+
         return $this;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getInlineIndented()
     {

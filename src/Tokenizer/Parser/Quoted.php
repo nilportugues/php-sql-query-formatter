@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/23/14
- * Time: 1:23 PM
+ * Time: 1:23 PM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,14 +13,13 @@ namespace NilPortugues\Sql\QueryFormatter\Tokenizer\Parser;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class Quoted
- * @package NilPortugues\Sql\QueryFormatter\Tokenizer\Parser
+ * Class Quoted.
  */
 final class Quoted
 {
     /**
      * @param Tokenizer $tokenizer
-     * @param           string $string
+     * @param string    $string
      */
     public static function isQuoted(Tokenizer $tokenizer, $string)
     {
@@ -36,7 +35,7 @@ final class Quoted
      */
     protected static function isQuotedString($string)
     {
-        return $string[0] === '"' || $string[0] === '\'' || $string[0] === '`' || $string[0] === '[';
+        return !empty($string[0]) && ($string[0] === '"' || $string[0] === '\'' || $string[0] === '`' || $string[0] === '[');
     }
 
     /**
@@ -48,13 +47,13 @@ final class Quoted
     {
         $tokenType = Tokenizer::TOKEN_TYPE_QUOTE;
 
-        if ($string[0] === '`' || $string[0] === '[') {
+        if (!empty($string[0]) && ($string[0] === '`' || $string[0] === '[')) {
             $tokenType = Tokenizer::TOKEN_TYPE_BACK_TICK_QUOTE;
         }
 
         return [
-            Tokenizer::TOKEN_TYPE  => $tokenType,
-            Tokenizer::TOKEN_VALUE => self::wrapStringWithQuotes($string)
+            Tokenizer::TOKEN_TYPE => $tokenType,
+            Tokenizer::TOKEN_VALUE => self::wrapStringWithQuotes($string),
         ];
     }
 
@@ -63,7 +62,7 @@ final class Quoted
      *  1. backtick quoted string using `` to escape
      *  2. square bracket quoted string (SQL Server) using ]] to escape
      *  3. double quoted string using "" or \" to escape
-     *  4. single quoted string using '' or \' to escape
+     *  4. single quoted string using '' or \' to escape.
      *
      * @param string $string
      *
@@ -73,10 +72,10 @@ final class Quoted
     {
         $returnString = null;
 
-        $regex = '/^(((`[^`]*($|`))+)|((\[[^\]]*($|\]))(\][^\]]*($|\]))*)|' .
+        $regex = '/^(((`[^`]*($|`))+)|((\[[^\]]*($|\]))(\][^\]]*($|\]))*)|'.
             '(("[^"\\\\]*(?:\\\\.[^"\\\\]*)*("|$))+)|((\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*(\'|$))+))/s';
 
-        if (1 == preg_match($regex, $string, $matches)) {
+        if (1 == \preg_match($regex, $string, $matches)) {
             $returnString = $matches[1];
         }
 

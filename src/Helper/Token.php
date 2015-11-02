@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 11:38 AM
+ * Time: 11:38 AM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,7 @@ use NilPortugues\Sql\QueryFormatter\Formatter;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class Token
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class Token.
  */
 final class Token
 {
@@ -291,7 +290,7 @@ final class Token
         'WITH',
         'WORK',
         'WRITE',
-        'YEAR_MONTH'
+        'YEAR_MONTH',
     ];
 
     /**
@@ -316,7 +315,7 @@ final class Token
         'UNION ALL',
         'UNION',
         'EXCEPT',
-        'INTERSECT'
+        'INTERSECT',
     ];
 
     /**
@@ -332,7 +331,7 @@ final class Token
         'JOIN',
         'XOR',
         'OR',
-        'AND'
+        'AND',
     ];
 
     /**
@@ -635,7 +634,7 @@ final class Token
         'X',
         'Y',
         'YEAR',
-        'YEARWEEK'
+        'YEARWEEK',
     ];
 
     /**
@@ -659,9 +658,8 @@ final class Token
         '%',
         '|',
         '&',
-        '#'
+        '#',
     ];
-
 
     /**
      * @param $token
@@ -674,9 +672,9 @@ final class Token
     }
 
     /**
-     * @param string $token
+     * @param string      $token
      * @param Parentheses $parentheses
-     * @param Formatter $formatter
+     * @param Formatter   $formatter
      */
     public static function tokenHasLimitClause($token, Parentheses $parentheses, Formatter $formatter)
     {

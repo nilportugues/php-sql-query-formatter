@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 11:37 AM
+ * Time: 11:37 AM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,7 @@ use NilPortugues\Sql\QueryFormatter\Formatter;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class NewLine
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class NewLine.
  */
 class NewLine
 {
@@ -46,7 +45,7 @@ class NewLine
      */
     public function __construct(Formatter $formatter, Indent $indentation, Parentheses $parentheses)
     {
-        $this->formatter   = $formatter;
+        $this->formatter = $formatter;
         $this->indentation = $indentation;
         $this->parentheses = $parentheses;
     }
@@ -63,9 +62,9 @@ class NewLine
         $addedNewline = false;
 
         if (true === $this->newline) {
-            $this->formatter->appendToFormattedSql("\n" . str_repeat($tab, $this->indentation->getIndentLvl()));
+            $this->formatter->appendToFormattedSql("\n".str_repeat($tab, $this->indentation->getIndentLvl()));
             $this->newline = false;
-            $addedNewline  = true;
+            $addedNewline = true;
         }
 
         return $addedNewline;
@@ -85,7 +84,7 @@ class NewLine
     }
 
     /**
-     * @param integer $length
+     * @param int $length
      */
     public function writeNewLineForLongInlineValues($length)
     {
@@ -95,7 +94,6 @@ class NewLine
             $this->newline = true;
         }
     }
-
 
     /**
      * Adds a new line break for an opening parentheses for a non-inline expression.
@@ -109,14 +107,14 @@ class NewLine
     }
 
     /**
-     * @param boolean $addedNewline
-     * @param string  $tab
+     * @param bool   $addedNewline
+     * @param string $tab
      */
     public function addNewLineBeforeToken($addedNewline, $tab)
     {
         if (false === $addedNewline) {
             $this->formatter->appendToFormattedSql(
-                "\n" . str_repeat($tab, $this->indentation->getIndentLvl())
+                "\n".str_repeat($tab, $this->indentation->getIndentLvl())
             );
         }
     }
@@ -124,21 +122,20 @@ class NewLine
     /**
      * Add a newline before the top level reserved word if necessary and indent.
      *
-     * @param boolean $addedNewline
-     * @param string  $tab
+     * @param bool   $addedNewline
+     * @param string $tab
      */
     public function writeNewLineBecauseOfTopLevelReservedWord($addedNewline, $tab)
     {
         if (false === $addedNewline) {
             $this->formatter->appendToFormattedSql("\n");
         } else {
-            $this->formatter->setFormattedSql(rtrim($this->formatter->getFormattedSql(), $tab));
+            $this->formatter->setFormattedSql(\rtrim($this->formatter->getFormattedSql(), $tab));
         }
-        $this->formatter->appendToFormattedSql(str_repeat($tab, $this->indentation->getIndentLvl()));
+        $this->formatter->appendToFormattedSql(\str_repeat($tab, $this->indentation->getIndentLvl()));
 
         $this->newline = true;
     }
-
 
     /**
      * Commas start a new line unless they are found within inline parentheses or SQL 'LIMIT' clause.
@@ -165,7 +162,7 @@ class NewLine
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getNewline()
     {
@@ -173,13 +170,14 @@ class NewLine
     }
 
     /**
-     * @param boolean $newline
+     * @param bool $newline
      *
      * @return $this
      */
     public function setNewline($newline)
     {
         $this->newline = $newline;
+
         return $this;
     }
 }

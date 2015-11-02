@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 6/26/14
- * Time: 2:19 AM
+ * Time: 2:19 AM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,7 @@ namespace NilPortugues\Tests\Sql\QueryFormatter\Tokenizer;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class TokenizerTest
- * @package NilPortugues\Tests\Sql\QueryFormatter\Helper
+ * Class TokenizerTest.
  */
 class TokenizerTest extends \PHPUnit_Framework_TestCase
 {
@@ -323,13 +322,13 @@ SQL;
     }
 
     /**
-     * Check if boundary characters are in array. Boundary characters are: ;:)(.=<>+-\/!^%|&#
+     * Check if boundary characters are in array. Boundary characters are: ;:)(.=<>+-\/!^%|&#.
      *
      * @test
      */
     public function itShouldTokenizeBoundaryCharacter()
     {
-        $sql = "SELECT id_user, name FROM users";
+        $sql = 'SELECT id_user, name FROM users';
 
         $result = $this->tokenizer->tokenize($sql);
 
@@ -346,7 +345,7 @@ SQL;
     /**
      * Tokenize columns should not be a problem, even if using a reserved word as a column name.
      * Example: users.user_id
-     * Example of edge cases: users.desc, user.from
+     * Example of edge cases: users.desc, user.from.
      *
      * @test
      */
@@ -373,7 +372,7 @@ SQL;
      */
     public function itShouldTokenizeReservedTopLevel()
     {
-        $sql = "SELECT id_user, name FROM users";
+        $sql = 'SELECT id_user, name FROM users';
         $result = $this->tokenizer->tokenize($sql);
 
         $reservedTopLevelTokenFound = false;

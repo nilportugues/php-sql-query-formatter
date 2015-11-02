@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 10:09 PM
+ * Time: 10:09 PM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,7 @@ use NilPortugues\Sql\QueryFormatter\Formatter;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class Comment
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class Comment.
  */
 class Comment
 {
@@ -67,10 +66,10 @@ class Comment
     public function writeCommentBlock($token, $tab, $queryValue)
     {
         if ($token[Tokenizer::TOKEN_TYPE] === Tokenizer::TOKEN_TYPE_BLOCK_COMMENT) {
-            $indent = str_repeat($tab, $this->indentation->getIndentLvl());
+            $indent = \str_repeat($tab, $this->indentation->getIndentLvl());
 
-            $this->formatter->appendToFormattedSql("\n" . $indent);
-            $queryValue = str_replace("\n", "\n" . $indent, $queryValue);
+            $this->formatter->appendToFormattedSql("\n".$indent);
+            $queryValue = \str_replace("\n", "\n".$indent, $queryValue);
         }
 
         $this->formatter->appendToFormattedSql($queryValue);

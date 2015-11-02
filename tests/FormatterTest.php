@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 6/26/14
- * Time: 9:11 PM
+ * Time: 9:11 PM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,7 @@ namespace NilPortugues\Tests\Sql\QueryFormatter;
 use NilPortugues\Sql\QueryFormatter\Formatter;
 
 /**
- * Class FormatterTest
- * @package NilPortugues\Tests\Sql\QueryFormatter\Helper
+ * Class FormatterTest.
  */
 class FormatterTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,11 +32,11 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
      */
     private function readExpectedQueryFile()
     {
-        $expectedQueryArray = explode(
+        $expectedQueryArray = \explode(
             $this->querySeparator,
-            file_get_contents(realpath(dirname(__FILE__)) . $this->expectedResultFilePath)
+            \file_get_contents(\realpath(\dirname(__FILE__)).$this->expectedResultFilePath)
         );
-        $expectedQueryArray = array_filter($expectedQueryArray);
+        $expectedQueryArray = \array_filter($expectedQueryArray);
 
         return $expectedQueryArray;
     }
@@ -51,7 +50,7 @@ class FormatterTest extends \PHPUnit_Framework_TestCase
 
         $queryTestSet = array();
         foreach ($expectedQueryArray as $expectedQuery) {
-            $queryTestSet[] = array(preg_replace('/\\s+/', ' ', $expectedQuery), $expectedQuery);
+            $queryTestSet[] = array(\preg_replace('/\\s+/', ' ', $expectedQuery), $expectedQuery);
         }
 
         return $queryTestSet;

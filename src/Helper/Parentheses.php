@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/22/14
- * Time: 11:37 AM
+ * Time: 11:37 AM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,8 +14,7 @@ use NilPortugues\Sql\QueryFormatter\Formatter;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class Parentheses
- * @package NilPortugues\Sql\QueryFormatter\Helper
+ * Class Parentheses.
  */
 class Parentheses
 {
@@ -39,12 +38,12 @@ class Parentheses
      */
     public function __construct(Formatter $formatter, Indent $indentation)
     {
-        $this->formatter   = $formatter;
+        $this->formatter = $formatter;
         $this->indentation = $indentation;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getInlineParentheses()
     {
@@ -52,13 +51,14 @@ class Parentheses
     }
 
     /**
-     * @param boolean $inlineParentheses
+     * @param bool $inlineParentheses
      *
      * @return $this
      */
     public function setInlineParentheses($inlineParentheses)
     {
         $this->inlineParentheses = $inlineParentheses;
+
         return $this;
     }
 
@@ -122,18 +122,18 @@ class Parentheses
      */
     public function writeInlineParenthesesBlock($tab, $queryValue)
     {
-        $this->formatter->setFormattedSql(rtrim($this->formatter->getFormattedSql(), ' '));
+        $this->formatter->setFormattedSql(\rtrim($this->formatter->getFormattedSql(), ' '));
 
         if ($this->indentation->getInlineIndented()) {
             $indentTypes = $this->indentation->getIndentTypes();
-            array_shift($indentTypes);
+            \array_shift($indentTypes);
             $this->indentation->setIndentTypes($indentTypes);
             $this->indentation->setIndentLvl($this->indentation->getIndentLvl() - 1);
 
-            $this->formatter->appendToFormattedSql("\n" . str_repeat($tab, $this->indentation->getIndentLvl()));
+            $this->formatter->appendToFormattedSql("\n".str_repeat($tab, $this->indentation->getIndentLvl()));
         }
 
         $this->inlineParentheses = false;
-        $this->formatter->appendToFormattedSql($queryValue . ' ');
+        $this->formatter->appendToFormattedSql($queryValue.' ');
     }
 }

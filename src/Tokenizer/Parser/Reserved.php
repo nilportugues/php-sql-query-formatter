@@ -2,7 +2,7 @@
 /**
  * Author: Nil Portugués Calderó <contact@nilportugues.com>
  * Date: 12/23/14
- * Time: 1:18 PM
+ * Time: 1:18 PM.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,8 +13,7 @@ namespace NilPortugues\Sql\QueryFormatter\Tokenizer\Parser;
 use NilPortugues\Sql\QueryFormatter\Tokenizer\Tokenizer;
 
 /**
- * Class Reserved
- * @package NilPortugues\Sql\QueryFormatter\Tokenizer
+ * Class Reserved.
  */
 final class Reserved
 {
@@ -23,8 +22,8 @@ final class Reserved
      */
     protected static $regex = [
         Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL => 'getRegexReservedTopLevel',
-        Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE   => 'getRegexReservedNewLine',
-        Tokenizer::TOKEN_TYPE_RESERVED           => 'getRegexReserved'
+        Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE => 'getRegexReservedNewLine',
+        Tokenizer::TOKEN_TYPE_RESERVED => 'getRegexReserved',
     ];
 
     /**
@@ -39,7 +38,7 @@ final class Reserved
         $tokenData = [];
 
         if (!$tokenizer->getNextToken() && self::isReservedPrecededByDotCharacter($previous)) {
-            $upperCase = strtoupper($string);
+            $upperCase = \strtoupper($string);
 
             self::getReservedString($tokenData, Tokenizer::TOKEN_TYPE_RESERVED_TOP_LEVEL, $string, $tokenizer);
             self::getReservedString($tokenData, Tokenizer::TOKEN_TYPE_RESERVED_NEWLINE, $upperCase, $tokenizer);
@@ -64,13 +63,13 @@ final class Reserved
     /**
      * @param array     $tokenData
      * @param           $type
-     * @param           string $string
+     * @param string    $string
      * @param Tokenizer $tokenizer
      */
     protected static function getReservedString(array &$tokenData, $type, $string, Tokenizer $tokenizer)
     {
         $matches = [];
-        $method  = self::$regex[$type];
+        $method = self::$regex[$type];
 
         if (empty($tokenData) && self::isReservedString(
                 $string,
@@ -85,7 +84,7 @@ final class Reserved
 
     /**
      * @param string $upper
-     * @param array $matches
+     * @param array  $matches
      * @param string $regexReserved
      * @param string $regexBoundaries
      *
@@ -93,9 +92,9 @@ final class Reserved
      */
     protected static function isReservedString($upper, array &$matches, $regexReserved, $regexBoundaries)
     {
-        return 1 == preg_match(
-            '/^(' . $regexReserved . ')($|\s|' . $regexBoundaries . ')/',
-            strtoupper($upper),
+        return 1 == \preg_match(
+            '/^('.$regexReserved.')($|\s|'.$regexBoundaries.')/',
+            \strtoupper($upper),
             $matches
         );
     }
@@ -103,15 +102,15 @@ final class Reserved
     /**
      * @param string $type
      * @param string $string
-     * @param array $matches
+     * @param array  $matches
      *
      * @return array
      */
     protected static function getStringTypeArray($type, $string, array &$matches)
     {
         return [
-            Tokenizer::TOKEN_TYPE  => $type,
-            Tokenizer::TOKEN_VALUE => substr($string, 0, strlen($matches[1]))
+            Tokenizer::TOKEN_TYPE => $type,
+            Tokenizer::TOKEN_VALUE => \substr($string, 0, \strlen($matches[1])),
         ];
     }
 }
