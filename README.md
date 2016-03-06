@@ -1,8 +1,13 @@
 SQL Query Formatter
 =================
 
-[![Build Status](https://travis-ci.org/nilportugues/sql-query-formatter.svg)](https://travis-ci.org/nilportugues/sql-query-formatter) [![Coverage Status](https://img.shields.io/coveralls/nilportugues/sql-query-formatter.svg)](https://coveralls.io/r/nilportugues/sql-query-formatter?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nilportugues/sql-query-formatter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nilportugues/sql-query-formatter/?branch=master) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20/mini.png)](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20) [![Latest Stable Version](https://poser.pugx.org/nilportugues/sql-query-formatter/v/stable)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![Total Downloads](https://poser.pugx.org/nilportugues/sql-query-formatter/downloads)](https://packagist.org/packages/nilportugues/sql-query-formatter) [![License](https://poser.pugx.org/nilportugues/sql-query-formatter/license)](https://packagist.org/packages/nilportugues/sql-query-formatter) 
-
+[![Build Status](https://travis-ci.org/nilportugues/php-sql-query-formatter.svg)](https://travis-ci.org/nilportugues/php-sql-query-formatter)
+[![Coverage Status](https://img.shields.io/coveralls/nilportugues/sql-query-formatter.svg)](https://coveralls.io/r/nilportugues/sql-query-formatter?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/nilportugues/sql-query-formatter/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/nilportugues/sql-query-formatter/?branch=master) [![SensioLabsInsight](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20/mini.png)](https://insight.sensiolabs.com/projects/a57aa8f3-bbe1-43a5-941e-689d8435ab20)
+[![Latest Stable Version](https://poser.pugx.org/nilportugues/sql-query-formatter/v/stable)](https://packagist.org/packages/nilportugues/sql-query-formatter)
+[![Total Downloads](https://poser.pugx.org/nilportugues/sql-query-formatter/downloads)](https://packagist.org/packages/nilportugues/sql-query-formatter)
+[![License](https://poser.pugx.org/nilportugues/sql-query-formatter/license)](https://packagist.org/packages/nilportugues/sql-query-formatter) 
+[![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://paypal.me/nilportugues)
 
 A very lightweight PHP class that re-formats unreadable or computer-generated SQL query statements to human-friendly readable text.
 
