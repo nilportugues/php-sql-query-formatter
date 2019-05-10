@@ -454,9 +454,7 @@ WHERE
 ALTER TABLE
     `PREFIX_employee`
 ADD
-    `bo_color` varchar(32) default NULL
-AFTER
-    `stats_date_to`
+    `bo_color` varchar(32) default NULL AFTER `stats_date_to`
 ----------SEPARATOR----------
 INSERT INTO `PREFIX_cms_category_lang`
 VALUES
@@ -477,16 +475,27 @@ SET
 ALTER TABLE
     `PREFIX_customer`
 ADD
-    `note` text
-AFTER
-    `secure_key`
+    `note` text AFTER `secure_key`
+----------SEPARATOR----------
+ALTER TABLE
+    `PREFIX_first`
+ADD
+    `note` text FIRST
+----------SEPARATOR----------
+ALTER TABLE
+    `PREFIX_modify`
+MODIFY
+    `name2` VARCHAR(20) COLLATE 'utf8mb4_unicode_ci' NOT NULL AFTER `name`
+----------SEPARATOR----------
+ALTER TABLE
+    `PREFIX_cange`
+CHANGE
+    `name` `_name` VARCHAR(20) COLLATE 'utf8mb4_unicode_ci' NULL
 ----------SEPARATOR----------
 ALTER TABLE
     `PREFIX_contact`
 ADD
-    `customer_service` tinyint(1) NOT NULL DEFAULT 0
-AFTER
-    `email`
+    `customer_service` tinyint(1) NOT NULL DEFAULT 0 AFTER `email`
 ----------SEPARATOR----------
 INSERT INTO `PREFIX_specific_price` (
     `id_product`, `id_shop`, `id_currency`,
